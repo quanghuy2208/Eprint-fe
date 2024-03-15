@@ -26,7 +26,7 @@ const OrderPage = () => {
                                     <div className="order_step-underline2"></div>
                                 </div>
                                 <div className="order_step-dscr">
-                                    <span>Kiểm tra thông tin đơn hàng</span>
+                                    <span>Kiểm tra thông tin <br />đơn hàng</span>
                                 </div>
                             </div>
                         </div>
@@ -693,6 +693,78 @@ const OrderPage = () => {
                                     <option value="3"> Lorem</option>
                                     <option value="4">Lorem ipsum dolor, sit amet consectetur adipisicing.</option>
                                 </select>
+                            </div>
+                            <span className="order_prop-choice">Kỹ thuật in</span>
+                            <div className="material-size">
+                                <div className="prop-box">
+                                    <div className="title">
+                                    Số mặt in <span>*</span>
+                                    </div>
+                                    <select name="" id="" className="prop-select">
+                                        <option value="1">Chất liệu</option>
+                                        <option value="2">Lorem ipsum dolor sit.</option>
+                                        <option value="3"> Lorem</option>
+                                        <option value="4">Lorem ipsum dolor, sit amet consectetur adipisicing.</option>
+                                    </select>
+                                </div>
+                                <div className="prop-box">
+                                    <div className="title">
+                                    Vật liệu  <span>*</span>
+                                    </div>
+                                    <select name="" id="" className="prop-select">
+                                        <option value="1">Kích thước (mm)</option>
+                                        <option value="2">Lorem ipsum dolor sit.</option>
+                                        <option value="3"> Lorem</option>
+                                        <option value="4">Lorem ipsum dolor, sit amet consectetur adipisicing.</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <span className="order_prop-choice">Gia công</span>
+                            <div className="row choice-item">
+                                        <div className="col product-detail_checkbox">
+                                            <label>
+                                                <input type="checkbox" /> <span>Cán mờ</span>
+                                            </label>
+                                        </div>
+                                        <div className="col product-detail_checkbox">
+                                            <label>
+                                                <input type="checkbox" /> <span>Cán bóng</span>
+                                            </label>
+                                        </div>
+                                        <div className="col product-detail_checkbox">
+                                            <label>
+                                                <input type="checkbox" /> <span>Ép kim</span>
+                                            </label>
+                                        </div>
+                            </div>
+                            <div className="row choice-item">
+                                        <div className="col product-detail_checkbox">
+                                            <label>
+                                                <input type="checkbox" /> <span>Ép nhũ</span>
+                                            </label>
+                                        </div>
+                                        <div className="col product-detail_checkbox">
+                                            <label>
+                                                <input type="checkbox" /> <span>Thúc nổi</span>
+                                            </label>
+                                        </div>
+                                        <div className="col product-detail_checkbox">
+                                            <label>
+                                                <input type="checkbox" /> <span>Xén thành phẩm</span>
+                                            </label>
+                                        </div>
+                            </div>
+                            <div className="order_prop-underline"></div>
+                            <div className="order_total-price">
+                                <div className="price-detail">
+                                    <p>Tổng tiền</p> <br />
+                                    <span>1.900.000 vnđ</span>
+                                </div>
+                                <div className="price-button">
+                                    <div className="order_step-underline1"></div>
+                                    <span>Tiếp tục</span>
+                                    <div className="order_step-underline2"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
