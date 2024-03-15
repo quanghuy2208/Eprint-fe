@@ -1,0 +1,32 @@
+@use 'sass:map';
+@import '../../../style/pages/all';
+@import 'C:\Users\ASUS\OneDrive\Desktop\eprint_web\eprint_frontend-v1\node_modules\animate.css';
+
+.category-list {
+    background-image: url('../../../img/product-background.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    .category-content {
+        display: flex;
+        flex-direction: column;
+        gap: 86px;
+        padding: 100px 0px;
+        .row {
+            .col.l-2-4.category-display {
+                display: flex;
+                justify-content: center;
+                .category-item {
+                    color: black;
+                    box-shadow: none;
+                    &:hover {
+                        box-shadow: 3px 3px 7px 0px #00000040;
+                    }
+                    .category__name {
+                        font-size: 20px;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,102 @@
+@use 'sass:map';
+@import '../../../style/pages/all';
+
+.col.l-4.policy-content_summary {
+    height: 100%;
+    position: fixed;
+    overflow-x: hidden;
+    z-index: -1;
+    width: 100%;
+    background-color: #f4f4f4;
+    .sidebar {
+        list-style: none;
+        position: absolute;
+        padding: 2px 0px 0px 0px;
+        transition: left 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        .summary_list {
+            text-transform: uppercase;
+            list-style: inside;
+            list-style-type: decimal;
+            padding: 0px;
+            color: map.get($theme-color, 'text');
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 24px;
+            .summary_list-align {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+            }
+            li {
+                text-transform: none;
+                padding-left: 40px;
+                font-size: 16px;
+                font-weight: 500;
+                line-height: 27px;
+            }
+        }
+    }
+}
+.col.l-9.policy-content_detail {
+    display: flex;
+    flex-direction: column;
+    width: 831px;
+    margin-left: 400px;
+    background-color: #ffffff;
+    gap: 0px;
+    .summary_list-align {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 24px;
+        color: map.get($theme-color, 'button');
+    }
+    .detail_list {
+        list-style-type: decimal;
+        list-style-position: inside;
+        font-size: 16px;
+        font-weight: 700;
+        color: map.get($theme-color, 'button');
+        padding: 0px;
+        .detail_item {
+            .detail_item-step {
+                margin-top: 10px;
+                padding: 0px;
+                list-style: none;
+                color: black;
+                li {
+                    line-height: 27px;
+                    font-weight: 500;
+                    span {
+                        font-weight: 700;
+                    }
+                    .paragraph {
+                        padding-left: 30px;
+                    }
+                }
+                .repay_notice {
+                    text-decoration: underline;
+                    font-size: 700;
+                }
+                .repay_notice-dscr {
+                    font-weight: 500;
+                    padding-left: 30px;
+                    line-height: 27px;
+                }
+            }
+        }
+    }
+}
+.policy_complain {
+    padding: 0px;
+    font-size: 16px;
+    font-weight: 500;
+    padding-left: 30px;
+    line-height: 27px;
+    margin-top: 10px;
+    .paragraph {
+        padding-left: 30px;
+    }
+}
