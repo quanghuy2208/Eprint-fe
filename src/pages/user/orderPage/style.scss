@@ -161,6 +161,7 @@
         color: map.get($theme-color, 'text');
     }
     input {
+        margin-top: 10px;
         width: 543px;
         height: 36px;
         border-radius: 4px;
@@ -216,6 +217,7 @@
         .require-list {
             display: flex;
             .require-list1 {
+                margin-right: 55px;
                 padding: 0px;
                 list-style: none;
                 .require-item {
@@ -321,6 +323,7 @@
     }
     .prop-box {
         .title {
+            margin-bottom: 10px;
             font-size: 16px;
             font-weight: 700;
             line-height: 23px;

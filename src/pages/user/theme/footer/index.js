@@ -46,14 +46,14 @@ const Footer = () => {
                 <div className="grid wide">
                     <div className="row footer-align">
                         <div className="col l-3 slogan">
-                            <img src={images.logo2} alt="" />
+                            <img src={images.logo2} alt="" className='footer-logo'/>
                             <div className="icon-dscr">
                                 <p className="footer_dscr">
                                     Chuyên cung cấp dịch vụ in ấn và thiết kế đa ngành nghề hàng đầu tại Việt Nam
                                 </p>
                             </div>
                             <div className="contact">
-                                <p className="icon">Theo dõi chúng tôi</p>
+                                <p className="icon follow">Theo dõi chúng tôi</p>
                                 <div className="footer__widget__social">
                                     <img src={images.tiktok} alt="" />
                                     <img src={images.facebook} alt="" />
@@ -62,7 +62,7 @@ const Footer = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col l-3 slogan">
+                        <div className="col l-4 slogan">
                             <p className="icon">Liên hệ Eprint</p>
                             <ul className="icon-dscr">
                                 <li className="footer_dscr">
@@ -92,9 +92,9 @@ const Footer = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="col l-6 slogan">
+                        <div className="col l-5 slogan">
                             <p className="icon">Địa chỉ</p>
-                            <ul className="icon-dscr">
+                            <ul className="icon-dscr2">
                                 <li className="footer_dscr">
                                     <span>Trụ sở chính:</span> 23/28 Nguyên Hồng, Phường Láng Hạ, Quận Đống Đa, Thành
                                     phố Hà Nội.

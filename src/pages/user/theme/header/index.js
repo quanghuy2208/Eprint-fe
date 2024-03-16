@@ -168,7 +168,7 @@ const Header = () => {
         <div>
             <div className="grid wide header__top">
                 <div className="row container">
-                    <div className="col l-3">
+                    <div className="col l-3 logo-align">
                         <img src={images.logo} alt="" />
                     </div>
                     <div className="col l-6 search">

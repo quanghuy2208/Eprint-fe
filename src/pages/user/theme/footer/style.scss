@@ -38,6 +38,7 @@
         display: flex;
         justify-content: center;
         padding-top: 30px;
+        margin-top: 0px;
     }
     ul {
         list-style: none;
@@ -53,6 +54,9 @@
     font-weight: 700;
     line-height: 24px;
     color: map.get($theme-color, 'main');
+}
+.follow {
+    padding-left: 0px !important;
 }
 .footer_dscr {
     font-size: 16px;
@@ -96,16 +100,28 @@ form {
 }
 .footer__certificate {
     display: flex;
-    gap: 44px;
+    justify-content: space-between;
     padding-left: 40px;
+    margin-top: 30px;
     img {
-        margin-right: 34px;
+        
         font-size: 58px;
+        width: 151px;
+        height: 58px;
+        
+        
     }
 }
 
 .navbar {
     background-color: #1e1d4e;
+}
+.slogan {
+    padding-top: 0px;
+    .footer-logo {
+        width: 172px;
+        height: 64.8px;
+    }
 }
 .slogan .icon {
     padding-left: 40px;
@@ -127,6 +143,9 @@ form {
 }
 .contact {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     flex-direction: column;
+}
+.icon-dscr2 {
+    margin: 40px 0px 0px 0px;
 }

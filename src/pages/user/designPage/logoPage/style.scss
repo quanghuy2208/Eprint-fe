@@ -5,6 +5,10 @@
     padding-top: 100px;
     font-size: 32px;
     font-weight: 700;
+    .logo-content_align {
+        display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     .logo-content_title1 {
         padding-bottom: 30px;
         color: map.get($theme-color, 'text');
@@ -34,6 +38,13 @@
             }
         }
     }
+    }
+}
+.logo-advanced_align {
+    padding-top: 100px;
+    font-size: 32px;
+    font-weight: 700;
+    
 }
 .grid.wide.logo-advanced {
     padding-top: 100px;
@@ -88,9 +99,15 @@
         color: map.get($theme-color, 'main');
     }
 }
-.slogan {
+.grid.wide.value {
+    padding: 50px 0px;
+    .value-align {
+        margin-top: 40px;
+    }
+}
+.grid.wide.slogan {
     gap: 20px;
-    padding-top: 100px;
+    padding: 50px 0px;
     display: flex;
     flex-direction: column;
     justify-content: center;

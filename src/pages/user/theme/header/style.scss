@@ -1,5 +1,11 @@
 @use 'sass:map';
 @import '../../../../style/pages/all';
+
+
+.col.l-3.logo-align {
+    display: flex;
+    align-items: center;
+}
 .header__top {
     top: 18px;
     left: 122px;

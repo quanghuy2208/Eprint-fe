@@ -287,7 +287,6 @@ h2 {
     align-items: center;
     list-style: none;
     gap: 16px;
-    padding-left: 86px;
 }
 .suggest-item {
     color: black;
@@ -308,6 +307,7 @@ h2 {
 .suggest-list__box {
     display: flex;
     align-items: baseline;
+    justify-content: space-between;
 }
 // product-grid
 

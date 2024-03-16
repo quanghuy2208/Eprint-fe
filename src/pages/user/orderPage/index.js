@@ -167,8 +167,8 @@ const OrderPage = () => {
                                                     />
                                                 </svg>
                                                 <p className="require-item_dscr">
-                                                    Ngắt <span>link</span> ảnh, <span>convert</span> font,
-                                                    <span>HỆ MÀU CMYK</span>
+                                                    Ngắt <span>link</span> ảnh, <span>convert</span> font
+                                                    <br /><span>HỆ MÀU CMYK</span>
                                                 </p>
                                             </li>
                                             <li className="require-item">
@@ -758,7 +758,7 @@ const OrderPage = () => {
                             <div className="order_total-price">
                                 <div className="price-detail">
                                     <p>Tổng tiền</p> <br />
-                                    <span>1.900.000 vnđ</span>
+                                    <span>Liên hệ</span>
                                 </div>
                                 <div className="price-button">
                                     <div className="order_step-underline1"></div>

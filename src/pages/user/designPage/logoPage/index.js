@@ -10,7 +10,7 @@ const LogoPage = () => {
         <>
             <div className="grid wide logo-content">
                 <div className="row">
-                    <div className="col l-6">
+                    <div className="col l-6 logo-content_align">
                         <div className="logo-content_title1">Nâng tầm thương hiệu cùng</div>
                         <div className="logo-content_title2">Logo doanh nghiệp</div>
                         <div className="logo-content_dscr">
@@ -44,14 +44,14 @@ const LogoPage = () => {
                             </button>
                         </div>
                     </div>
-                    <div className="col l-6">
+                    <div className="col l-6 ">
                         <img src={logoImg.logo1} alt="" />
                     </div>
                 </div>
             </div>
             <div className="grid wide logo-advanced">
                 <div className="row">
-                    <div className="col l-6">
+                    <div className="col l-6 logo-advanced_align">
                         <img src={logoImg.logo3} alt="" />
                     </div>
                     <div className="col l-6">
@@ -76,7 +76,7 @@ const LogoPage = () => {
                         </div>
                     </div>
                     <h2 className="center">Our Case Study</h2>
-                    <div className="row">
+                    <div className="row value-align">
                         <div className="col l-4 value-align">
                             <div className="value-item">
                                 <img src={logoImg.logo4} alt="" />
