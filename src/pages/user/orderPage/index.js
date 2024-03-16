@@ -700,7 +700,7 @@ const OrderPage = () => {
                                     <div className="title">
                                     Số mặt in <span>*</span>
                                     </div>
-                                    <select name="" id="" className="prop-select">
+                                    <select name="" id="" className="prop-select" >
                                         <option value="1">Chất liệu</option>
                                         <option value="2">Lorem ipsum dolor sit.</option>
                                         <option value="3"> Lorem</option>

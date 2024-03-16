@@ -7,41 +7,44 @@
     bottom: 0;
 }
 
-.col.l-4.policy-content_summary {
-    // height: 100%;
-    // position: fixed;
-    // overflow-x: hidden;
-    // z-index: -1;
-    height: fit-content;
-    // width: 100%;
-    background-color: #f4f4f4;
-    position: absolute;
-    // top: 0;
-    .sidebar {
-        list-style: none;
+.col.l-4{
+
+    .policy-content_summary {
+        // height: 100%;
+        // position: fixed;
+        // overflow-x: hidden;
+        // z-index: -1;
+        height: fit-content;
+        // width: 100%;
+        background-color: #f4f4f4;
         // position: absolute;
-        padding: 2px 0px 0px 0px;
-        transition: left 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        .summary_list {
-            text-transform: uppercase;
-            list-style: inside;
-            list-style-type: decimal;
-            padding: 0px;
-            color: map.get($theme-color, 'text');
-            font-size: 20px;
-            font-weight: 700;
-            line-height: 24px;
-            .summary_list-align {
-                display: flex;
-                align-items: center;
-                gap: 15px;
-            }
-            li {
-                text-transform: none;
-                padding-left: 40px;
-                font-size: 16px;
-                font-weight: 500;
-                line-height: 27px;
+        // top: 0;
+        .sidebar {
+            list-style: none;
+            // position: absolute;
+            padding: 2px 0px 0px 0px;
+            transition: left 0.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            .summary_list {
+                text-transform: uppercase;
+                list-style: inside;
+                list-style-type: decimal;
+                padding: 0px;
+                color: map.get($theme-color, 'text');
+                font-size: 20px;
+                font-weight: 700;
+                line-height: 24px;
+                .summary_list-align {
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                }
+                li {
+                    text-transform: none;
+                    padding-left: 40px;
+                    font-size: 16px;
+                    font-weight: 500;
+                    line-height: 27px;
+                }
             }
         }
     }

@@ -3,6 +3,7 @@ import { images } from '../../../img/index';
 import { CiClock2 } from 'react-icons/ci';
 import { FaRegEye } from 'react-icons/fa';
 import { FaPencilAlt } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 const RecruitPage = () => {
     return (
         <>
@@ -13,7 +14,7 @@ const RecruitPage = () => {
                     </h2>
                     <div className="row">
                         <div className="col l-3 related-news_item">
-                            <div className="recruit">
+                            <Link to ={'position'} className="recruit">
                                 <img src={images.news} alt="" className="news-img"></img>
                                 <div className="news-body">
                                     <div className="news-name">Thiết kế và in ấn Menu ở đâu đẹp và chất lượng?</div>
@@ -38,7 +39,7 @@ const RecruitPage = () => {
                                         </ul>
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
                             <div className="recruit">
                                 <img src={images.news} alt="" className="news-img"></img>
                                 <div className="news-body">

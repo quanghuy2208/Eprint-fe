@@ -333,7 +333,7 @@ const Header = () => {
                         </nav>
                     </div>
                     <div className="col l-3">
-                        <img src={images.Print} className="print" alt=""></img>
+                        <Link to = {'order'}><img src={images.Print} className="print" alt=""></img></Link>
                     </div>
                 </div>
             </div>
