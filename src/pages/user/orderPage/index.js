@@ -750,7 +750,7 @@ const OrderPage = () => {
                                         </div>
                                         <div className="col product-detail_checkbox">
                                             <label>
-                                                <input type="checkbox" /> <span>Xén thành phẩm</span>
+                                                <input type="checkbox" /> <span className='three-digit'>Xén thành phẩm</span>
                                             </label>
                                         </div>
                             </div>

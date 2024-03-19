@@ -49,61 +49,63 @@ const LogoPage = () => {
                     </div>
                 </div>
             </div>
-            <div className="grid wide logo-advanced">
-                <div className="row">
-                    <div className="col l-6 logo-advanced_align">
-                        <img src={logoImg.logo3} alt="" />
-                    </div>
-                    <div className="col l-6">
-                        <div className="logo-advanced_title">Tại sao cần thiết kế logo?</div>
-                        <div className="logo-advanced_dscr">
-                            Để tạo điểm nhấn riêng cho thương hiệu, các doanh nghiệp cần chú trọng tới việc thiết kế
-                            Logo vì những lợi ích lớn mà nó mang lại:
+            <div className="grid logo-advanced_background">
+                <div className="grid wide logo-advanced">
+                    <div className="row">
+                        <div className="col l-6 ">
+                            <img src={logoImg.logo3} alt="" />
                         </div>
-                        <ul className="logo-advanced_list">
-                            <li className="logo-advanced_list-item">- Khẳng định sự uy tín, chuyên nghiệp</li>
-                            <li className="logo-advanced_list-item">- Tạo lợi thế cạnh tranh</li>
-                            <li className="logo-advanced_list-item">- Gia tăng nhận diện thương hiệu</li>
-                            <li className="logo-advanced_list-item">- Thu hút và giữ chân khách hàng</li>
-                        </ul>
-                        <div className="logo-advanced_button">Thiết kế ngay</div>
-                    </div>
-                </div>
-                <div className="grid wide value">
-                    <div className="suggest-header__boxs">
-                        <div className="suggest-header__box">
-                            <h1 className="center">Dự án tiêu biểu</h1>
+                        <div className="col l-6 logo-advanced_align">
+                            <div className="logo-advanced_title">Tại sao cần thiết kế logo?</div>
+                            <div className="logo-advanced_dscr">
+                                Để tạo điểm nhấn riêng cho thương hiệu, các doanh nghiệp cần chú trọng tới việc thiết kế
+                                Logo vì những lợi ích lớn mà nó mang lại:
+                            </div>
+                            <ul className="logo-advanced_list">
+                                <li className="logo-advanced_list-item">- Khẳng định sự uy tín, chuyên nghiệp</li>
+                                <li className="logo-advanced_list-item">- Tạo lợi thế cạnh tranh</li>
+                                <li className="logo-advanced_list-item">- Gia tăng nhận diện thương hiệu</li>
+                                <li className="logo-advanced_list-item">- Thu hút và giữ chân khách hàng</li>
+                            </ul>
+                            <div className="logo-advanced_button">Thiết kế ngay</div>
                         </div>
                     </div>
-                    <h2 className="center">Our Case Study</h2>
-                    <div className="row value-align">
-                        <div className="col l-4 value-align">
-                            <div className="value-item">
-                                <img src={logoImg.logo4} alt="" />
-                            </div>
-                            <div className="value-item">
-                                <img src={logoImg.logo4} alt="" />
+                    <div className="grid wide value">
+                        <div className="suggest-header__boxs">
+                            <div className="suggest-header__box">
+                                <h1 className="center">Dự án tiêu biểu</h1>
                             </div>
                         </div>
-                        <div className="col l-4 value-align">
-                            <div className="value-item">
-                                <img src={logoImg.logo4} alt="" />
+                        <h2 className="center">Our Case Study</h2>
+                        <div className="row value-align">
+                            <div className="col l-4 value-align">
+                                <div className="value-item">
+                                    <img src={logoImg.logo4} alt="" />
+                                </div>
+                                <div className="value-item">
+                                    <img src={logoImg.logo4} alt="" />
+                                </div>
                             </div>
-                            <div className="value-item">
-                                <img src={logoImg.logo4} alt="" />
+                            <div className="col l-4 value-align">
+                                <div className="value-item">
+                                    <img src={logoImg.logo4} alt="" />
+                                </div>
+                                <div className="value-item">
+                                    <img src={logoImg.logo4} alt="" />
+                                </div>
+                            </div>
+                            <div className="col l-4 value-align">
+                                <div className="value-item">
+                                    <img src={logoImg.logo4} alt="" />
+                                </div>
+                                <div className="value-item">
+                                    <img src={logoImg.logo4} alt="" />
+                                </div>
                             </div>
                         </div>
-                        <div className="col l-4 value-align">
-                            <div className="value-item">
-                                <img src={logoImg.logo4} alt="" />
-                            </div>
-                            <div className="value-item">
-                                <img src={logoImg.logo4} alt="" />
-                            </div>
+                        <div className="logo-cs_button-align">
+                            <div className="logo-cs_button">Xem thêm </div>
                         </div>
-                    </div>
-                    <div className="logo-cs_button-align">
-                        <div className="logo-cs_button">Xem thêm </div>
                     </div>
                 </div>
             </div>

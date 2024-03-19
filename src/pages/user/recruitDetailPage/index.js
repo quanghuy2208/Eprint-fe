@@ -24,7 +24,7 @@ const RecruitDetailPage = () => {
                     </div>
 
                     <div className="row">
-                        <div className="col l-9 ">
+                        <div className="col l-9 recruit-detail_align">
                             <div className="recruit-detail_des">
                                 <div className="recruit-detail_des-title">Mô tả công việc</div>
                                 <div className="recruit-detail_des-underline"></div>

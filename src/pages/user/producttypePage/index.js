@@ -35,7 +35,7 @@ const ProductTypePage = () => {
                         <div className="suggest-list__box">
                             <h2> Thư viện Lịch tết</h2>
                             <ul className="suggest-list">
-                                <li className="suggest-item">Xem tất cả</li>
+                                <li className="suggest-item">Tất cả</li>
                             </ul>
                         </div>
                     </div>

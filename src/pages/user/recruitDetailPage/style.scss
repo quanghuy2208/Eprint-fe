@@ -30,7 +30,8 @@ h2 {
         }
     }
 }
-.col.l-9 {
+.col.l-9.recruit-detail_align {
+    gap: 35px;
     .recruit-detail_des {
         display: unset;
         .recruit-detail_des-title {
@@ -38,7 +39,7 @@ h2 {
             font-size: 24px;
             font-weight: 700;
             line-height: 43px;
-            margin-top: 40px;
+            margin-top: 50px;
         }
         .recruit-detail_des-underline {
             width: 164px;

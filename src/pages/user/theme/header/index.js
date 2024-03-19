@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom';
 import { ROUTERS } from '../../../../utils/router';
 import { images } from '../../../../img/index';
 
+
 const Header = () => {
     const [menus] = useState([
         {
@@ -60,7 +61,7 @@ const Header = () => {
                             path: '',
                         },
                         {
-                            name: 'Brochure',
+                            name: 'Brochure/Tờ gấp',
                             path: '',
                         },
                         {
@@ -84,7 +85,7 @@ const Header = () => {
                             path: '',
                         },
                         {
-                            name: 'Thiệp mời',
+                            name: 'Thiệp mời/Thư cảm ơn',
                             path: '',
                         },
                         {
@@ -193,6 +194,7 @@ const Header = () => {
                                 </li>
 
                                 <li className="text">Đăng nhập</li>
+                               
                             </div>
                         </ul>
                     </div>

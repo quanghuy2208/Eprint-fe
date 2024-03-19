@@ -8,7 +8,6 @@ import { CiClock2 } from 'react-icons/ci';
 import { CiSearch } from 'react-icons/ci';
 import { BsHandbag } from 'react-icons/bs';
 import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
 import './style.scss';
 
 const DetailPage = () => {

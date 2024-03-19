@@ -1,3 +1,4 @@
+import LoginPage from './pages/user/loginOrSignUpPage';
 import HomePage from './pages/user/homePage';
 import AboutPage from './pages/user/aboutPage';
 import RecruitPage from './pages/user/recruitPage';
@@ -14,6 +15,10 @@ import { ROUTERS } from './utils/router';
 import { Routes, Route } from 'react-router-dom';
 const renderUserRouter = () => {
     const userRouters = [
+        {
+            path: ROUTERS.USER.LOGIN,
+            component: <LoginPage />,
+        },
         {
             path: ROUTERS.USER.HOME,
             component: <HomePage />,

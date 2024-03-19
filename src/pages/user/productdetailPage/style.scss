@@ -35,7 +35,9 @@
                         color: #8c8c8c;
                         font-size: 16px;
                         font-weight: 500;
+                        gap: 8px;
                         svg {
+                            font-size: 25px;
                             color: map.get($theme-color, 'button');
                         }
                     }
@@ -361,7 +363,29 @@ body.active-modal {
 .wide-product-detail_slider {
     max-width: 900px !important;
     margin-top: 30px !important;
-
+    .react-multi-carousel-list {
+        align-items: center;
+        display: flex;
+        overflow: hidden;
+        position: relative;
+        .react-multi-carousel-track {
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: row;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            transform-style: preserve-3d;
+            will-change: transform, transition;
+            .react-multi-carousel-item {
+                -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+                transform-style: preserve-3d;
+            }
+        }
+    }
     .product-detail_slider {
         .product-detail_slider-item {
             width: 784px;
@@ -369,12 +393,52 @@ body.active-modal {
             position: relative;
             background-repeat: no-repeat;
             background-size: cover;
-            background-position: top center;
+            background-position: top;
         }
     }
 }
 .react-multiple-carousel__arrow--right {
     right: calc(16% + 1px);
+}
+.react-multiple-carousel__arrow--right:before {
+    content: "\276D";
+}
+.react-multiple-carousel__arrow--left {
+    left: calc(4% + 1px);
+}
+.react-multiple-carousel__arrow--left:before {
+    content: "\276C";
+}
+.react-multiple-carousel__arrow:before {
+    color: #fff;
+    display: block;
+    font-family: revicons;
+    font-size: 20px;
+    position: relative;
+    text-align: center;
+    z-index: 2;
+}
+.react-multiple-carousel__arrow {
+    background: #00000080;
+    border: 0;
+    border-radius: 35px;
+    cursor: pointer;
+    min-height: 43px;
+    min-width: 43px;
+    opacity: 1;
+    outline: 0;
+    position: absolute;
+    transition: all .5s;
+    z-index: 1000;
+}
+.react-multiple-carousel__arrow:before {
+    color: #fff;
+    display: block;
+    font-family: revicons;
+    font-size: 20px;
+    position: relative;
+    text-align: center;
+    z-index: 2;
 }
 .product-detail_support-image {
     margin-top: 43px;

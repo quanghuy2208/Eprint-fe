@@ -132,11 +132,10 @@
         }
     }
 }
+
 .order_input-form {
     margin-top: 45px;
     background-color: map.get($theme-color, 'main');
-    width: 589px;
-    height: 644px;
     border-radius: 16px;
     padding: 14px 22px;
     .order_input-form-title {
@@ -175,8 +174,7 @@
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        width: 543px;
-        height: 218px;
+        height: 322px;
         background-color: #e0f0ff;
         svg {
             font-size: 8.8rem;
@@ -277,6 +275,7 @@
     }
 }
 .col.l-6.order_prop {
+    padding-left: 55px;
     gap: 25px;
     display: flex;
     flex-direction: column;
@@ -347,7 +346,7 @@
         }
     }
     .order_prop-underline {
-        width: 600px;
+        width: 100%;
         border: 1px solid black;
     }
     .order_total-price {
@@ -365,8 +364,8 @@
             }
         }
         .price-button {
-            width: 206px;
-            height: 56px;
+            width: 38%;
+            height: 70%;
             background-color: map.get($theme-color, 'button');
             transform: skew(-15deg);
             text-transform: uppercase;
@@ -401,17 +400,19 @@
 }
 .choice-item {
     display: flex;
-    gap: 10px;
     .col.product-detail_checkbox {
         label {
             display: flex;
             align-items: center;
             position: relative;
             span {
-                width: 140px;
+                width: 100px;
                 font-size: 16px;
                 font-weight: 500;
                 line-height: 30px;
+            }
+            .three-digit {
+                width: max-content;
             }
             input[type='checkbox'] {
                 appearance: none;

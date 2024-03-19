@@ -40,10 +40,10 @@
     }
     }
 }
-.logo-advanced_align {
-    padding-top: 100px;
-    font-size: 32px;
-    font-weight: 700;
+.col.l-6.logo-advanced_align {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
     
 }
 .grid.wide.logo-advanced {
@@ -99,15 +99,19 @@
         color: map.get($theme-color, 'main');
     }
 }
+.logo-advanced_background {
+    background-image: url('../../../../img/news-background.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 .grid.wide.value {
-    padding: 50px 0px;
     .value-align {
         margin-top: 40px;
     }
 }
 .grid.wide.slogan {
     gap: 20px;
-    padding: 50px 0px;
+    padding: 100px 0px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -162,6 +166,7 @@
     }
 }
 .grid.wide.service-price {
+    padding: 100px 0px;
     .service-price_title {
         font-size: 24px;
         font-weight: 700;
