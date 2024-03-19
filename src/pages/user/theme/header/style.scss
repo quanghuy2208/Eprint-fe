@@ -30,9 +30,15 @@
                 font-size: 10px;
                 width: 12px;
             }
-            div {
+            .header__top-align {
                 display: flex;
                 align-items: baseline;
+                a {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: black;
+                    text-decoration: none;
+                }
             }
             li {
                 font-size: 16px;

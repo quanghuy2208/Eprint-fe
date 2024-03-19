@@ -39,6 +39,9 @@
         }
     }
     }
+    .logo-content_img {
+        width: 50vw;
+    }
 }
 .col.l-6.logo-advanced_align {
     display: flex;
@@ -47,7 +50,7 @@
     
 }
 .grid.wide.logo-advanced {
-    padding-top: 100px;
+    padding: 100px 0px;
     .logo-advanced_title {
         font-size: 32px;
         font-weight: 700;
@@ -105,9 +108,10 @@
     background-size: cover;
 }
 .grid.wide.value {
-    .value-align {
-        margin-top: 40px;
-    }
+    margin-top: 100px;
+}
+.value-align {
+    margin-top: 40px;
 }
 .grid.wide.slogan {
     gap: 20px;

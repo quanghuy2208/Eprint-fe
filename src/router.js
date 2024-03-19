@@ -1,4 +1,4 @@
-import LoginPage from './pages/user/loginOrSignUpPage';
+import LoginPage from './pages/user/loginOrSignUpPage/index.js';
 import HomePage from './pages/user/homePage';
 import AboutPage from './pages/user/aboutPage';
 import RecruitPage from './pages/user/recruitPage';
@@ -18,6 +18,8 @@ const renderUserRouter = () => {
         {
             path: ROUTERS.USER.LOGIN,
             component: <LoginPage />,
+            hideHeader: true,
+            hideFooter: true
         },
         {
             path: ROUTERS.USER.HOME,
@@ -66,13 +68,17 @@ const renderUserRouter = () => {
     ];
 
     return (
-        <MasterLayout>
-            <Routes>
+      <>
+        <Routes>
                 {userRouters.map((item, key) => (
-                    <Route key={key} path={item.path} element={item.component} />
+                    <Route key={key} path={item.path} element={
+                        <MasterLayout hideHeader={item.hideHeader} hideFooter={item.hideFooter}>
+{item.component}
+                </MasterLayout>
+
+                    } />
                 ))}
-            </Routes>
-        </MasterLayout>
+            </Routes></>
     );
 };
 const RouterCustom = () => {

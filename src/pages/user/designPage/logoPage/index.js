@@ -45,7 +45,7 @@ const LogoPage = () => {
                         </div>
                     </div>
                     <div className="col l-6 ">
-                        <img src={logoImg.logo1} alt="" />
+                        <img src={logoImg.logo1} alt="" className='logo-content_img' />
                     </div>
                 </div>
             </div>
@@ -118,7 +118,7 @@ const LogoPage = () => {
                 </div>
             </div>
             <div className="grid why-background">
-                <div className="grid wide value">
+                <div className="grid wide reason">
                     <div className="suggest-header__boxs">
                         <div className="suggest-header__box">
                             <h1 className="center">Why us</h1>

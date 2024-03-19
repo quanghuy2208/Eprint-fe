@@ -188,13 +188,12 @@ const Header = () => {
                                 <BsHandbag className="header__top-icon" />
                                 <span>0</span>
                             </li>
-                            <div>
+                            <div className='header__top-align'>
                                 <li>
                                     <BsPerson className="header__top-icon" />
                                 </li>
 
-                                <li className="text">Đăng nhập</li>
-                               
+                                <Link to ={'login'} className="text" >Đăng nhập</Link>
                             </div>
                         </ul>
                     </div>
