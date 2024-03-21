@@ -1,8 +1,42 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import './style.scss';
+import axios from 'axios';
 
 const LoginPage = () => {
+  const [userName, setUserName] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassWord] = useState();
   const wrapperRef = useRef(null);
+
+  const signUp = async () => {
+    try {
+      const res = await axios.post('http://localhost:3001/api/user/sign-up', {
+        name: userName,
+        email: email,
+        password: password,
+      });
+
+      alert(res.data.message);
+    } catch (error) {
+      console.error('Error occurred while signing in:', error);
+    }
+  };
+  const signIn = async () => {
+    try {
+      const res = await axios.post('http://localhost:3001/api/user/sign-in', {
+        email: email,
+        password: password,
+      });
+
+      if (res.data.message === 'SUCCESS') {
+        window.location.href = '/';
+      } else {
+        alert(res.data.message);
+      }
+    } catch (error) {
+      console.error('Error occurred while signing in:', error);
+    }
+  };
 
   const handleSignInClick = () => {
     if (wrapperRef.current) {
@@ -23,18 +57,18 @@ const LoginPage = () => {
           <form action="">
             <h2 className="login-title">Sign Up</h2>
             <div className="input-group">
-              <input type="text" required />
+              <input type="text" required value={userName} onChange={e => setUserName(e.target.value)} />
               <label htmlFor=""> Username</label>
             </div>
             <div className="input-group">
-              <input type="email" required />
+              <input type="email" required value={email} onChange={e => setEmail(e.target.value)} />
               <label htmlFor="">Email</label>
             </div>
             <div className="input-group">
-              <input type="password" required />
+              <input type="password" required value={password} onChange={e => setPassWord(e.target.value)} />
               <label htmlFor=""> Password</label>
             </div>
-            <button type="submit" className="btn">
+            <button type="submit" className="btn" onClick={signUp}>
               Sign Up
             </button>
             <div className="sign-link">
@@ -53,18 +87,18 @@ const LoginPage = () => {
           <form action="">
             <h2 className="login-title">Login</h2>
             <div className="input-group">
-              <input type="text" required />
-              <label htmlFor=""> Username</label>
+              <input type="email" required value={email} onChange={e => setEmail(e.target.value)} />
+              <label htmlFor=""> Email</label>
             </div>
             <div className="input-group">
-              <input type="password" required />
+              <input type="password" required value={password} onChange={e => setPassWord(e.target.value)} />
               <label htmlFor=""> Password</label>
             </div>
             <div className="forgot-pass">
               <a href="#">Forgot Password ?</a>
             </div>
 
-            <button type="submit" className="btn">
+            <button type="submit" className="btn" onClick={signIn}>
               Login
             </button>
 
