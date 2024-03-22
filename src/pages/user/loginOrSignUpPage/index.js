@@ -8,7 +8,8 @@ const LoginPage = () => {
   const [password, setPassWord] = useState();
   const wrapperRef = useRef(null);
 
-  const signUp = async () => {
+  const signUp = async event => {
+    event.preventDefault();
     try {
       const res = await axios.post('http://localhost:3001/api/user/sign-up', {
         name: userName,
@@ -16,19 +17,46 @@ const LoginPage = () => {
         password: password,
       });
 
-      alert(res.data.message);
+      if (res.data.status === 'OK') {
+        handleSignInClick();
+      } else {
+        alert(res.data.message);
+      }
     } catch (error) {
       console.error('Error occurred while signing in:', error);
     }
   };
-  const signIn = async () => {
+  const signIn = async event => {
+    event.preventDefault();
     try {
       const res = await axios.post('http://localhost:3001/api/user/sign-in', {
         email: email,
         password: password,
       });
 
-      if (res.data.message === 'SUCCESS') {
+      if (res.data.status === 'OK') {
+        const userData = {
+          email: email,
+          accessToken: res.data.access_token,
+          refreshToken: res.data.refresh_token,
+        };
+
+        localStorage.setItem('user', JSON.stringify(userData));
+
+        const searchRes = await axios.get('http://localhost:3001/api/user/get-details-by-email', {
+          params: {
+            email: email,
+          },
+        });
+
+        if (searchRes.data.status === 'OK') {
+          userData.name = searchRes.data.data.name;
+          localStorage.setItem('user', JSON.stringify(userData));
+        } else {
+          console.error('Error occurred while searching user by email:', searchRes.data.message);
+        }
+        console.log('🚀 ~ signIn ~ userData:', userData);
+
         window.location.href = '/';
       } else {
         alert(res.data.message);
