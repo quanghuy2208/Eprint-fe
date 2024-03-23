@@ -19,6 +19,7 @@ import { GoTriangleDown } from 'react-icons/go';
 import { Link } from 'react-router-dom';
 import { ROUTERS } from '../../../../utils/router';
 import { images } from '../../../../img/index';
+import { Popover } from 'antd';
 const userData = localStorage.getItem('user');
 const user = userData ? JSON.parse(userData) : null;
 const Header = () => {
@@ -165,6 +166,12 @@ const Header = () => {
     },
   ]);
   const [isShowCategories, setShowCategories] = useState(false);
+  const content = (
+    <div>
+      <p>Đăng xuất</p>
+      <p>Hồ sơ</p>
+    </div>
+  );
   return (
     <div>
       <div className="grid wide header__top">
@@ -193,7 +200,9 @@ const Header = () => {
                   <BsPerson className="header__top-icon" />
                 </li>
                 {user ? (
-                  <div style={{ fontFamily: 'Montserrat', fontSize: '16px', fontWeight: 700 }}>{user.name}</div>
+                  <Popover content={content} title="Title" trigger="click">
+                    <div className="user-detail">{user.name}</div>
+                  </Popover>
                 ) : (
                   <Link to={'/login'} className="text">
                     Đăng nhập

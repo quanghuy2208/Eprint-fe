@@ -13,6 +13,7 @@ import OrderPage from './pages/user/orderPage';
 import MasterLayout from './pages/user/theme/masterLayout';
 import { ROUTERS } from './utils/router';
 import { Routes, Route } from 'react-router-dom';
+import AdminPage from './pages/admin/adminPage/index.js';
 const renderUserRouter = () => {
   const userRouters = [
     {
@@ -64,6 +65,12 @@ const renderUserRouter = () => {
     {
       path: ROUTERS.USER.ORDER,
       component: <OrderPage />,
+    },
+    {
+      path: ROUTERS.ADMIN.PATH,
+      component: <AdminPage />,
+      hideHeader: true,
+      hideFooter: true,
     },
   ];
 

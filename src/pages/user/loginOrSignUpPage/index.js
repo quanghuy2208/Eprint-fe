@@ -55,7 +55,6 @@ const LoginPage = () => {
         } else {
           console.error('Error occurred while searching user by email:', searchRes.data.message);
         }
-        console.log('🚀 ~ signIn ~ userData:', userData);
 
         window.location.href = '/';
       } else {
