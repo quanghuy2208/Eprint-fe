@@ -1,28 +1,27 @@
 import { memo, useState } from 'react';
 import './style.scss';
-import { BsHandbag } from 'react-icons/bs';
-import { BsPerson } from 'react-icons/bs';
-import { ImCalendar } from 'react-icons/im';
-import { GrCatalog } from 'react-icons/gr';
-import { ImProfile } from 'react-icons/im';
-import { BsNewspaper } from 'react-icons/bs';
-import { BsBoxSeam } from 'react-icons/bs';
+import { BsHandbag, BsPerson, BsNewspaper, BsBoxSeam } from 'react-icons/bs';
+import { ImCalendar, ImProfile } from 'react-icons/im';
+import { GrCatalog, GrMenu } from 'react-icons/gr';
 import { MdAssistantPhoto } from 'react-icons/md';
 import { PiSelectionBackgroundBold } from 'react-icons/pi';
 import { FaRegPaperPlane } from 'react-icons/fa6';
-import { GiTicket } from 'react-icons/gi';
+import { GiTicket, GiPostStamp } from 'react-icons/gi';
 import { RiEmojiStickerLine } from 'react-icons/ri';
-import { GiPostStamp } from 'react-icons/gi';
 import { FaArrowRight } from 'react-icons/fa';
-import { GrMenu } from 'react-icons/gr';
 import { GoTriangleDown } from 'react-icons/go';
 import { Link } from 'react-router-dom';
 import { ROUTERS } from '../../../../utils/router';
 import { images } from '../../../../img/index';
 import { Popover } from 'antd';
+import * as UserService from '../../../../services/UserService';
+import { resetUser } from '../../../../redux/slices/userSlice';
+import { useDispatch } from 'react-redux';
 const userData = localStorage.getItem('user');
 const user = userData ? JSON.parse(userData) : null;
 const Header = () => {
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   const [menus] = useState([
     {
       name: 'Về Eprint',
@@ -51,7 +50,7 @@ const Header = () => {
           children: [
             {
               name: 'Logo',
-              path: 'design/logo',
+              path: '/logo',
             },
             {
               name: 'Catalogue',
@@ -166,9 +165,16 @@ const Header = () => {
     },
   ]);
   const [isShowCategories, setShowCategories] = useState(false);
+
+  const handleLogout = async () => {
+    setLoading(true);
+    await UserService.logoutUser();
+    dispatch(resetUser());
+    setLoading(false);
+  };
   const content = (
     <div>
-      <p>Đăng xuất</p>
+      <p onClick={handleLogout}>Đăng xuất</p>
       <p>Hồ sơ</p>
     </div>
   );
@@ -199,8 +205,8 @@ const Header = () => {
                 <li>
                   <BsPerson className="header__top-icon" />
                 </li>
-                {user ? (
-                  <Popover content={content} title="Title" trigger="click">
+                {user?.name ? (
+                  <Popover content={content} title="title" trigger="click">
                     <div className="user-detail">{user.name}</div>
                   </Popover>
                 ) : (
@@ -290,7 +296,7 @@ const Header = () => {
                     </Link>
                   </li>
                   <li className="header__menu__category-item">
-                    <Link to={'category'} className="header__menu__category-all">
+                    <Link to={'/category'} className="header__menu__category-all">
                       XEM TẤT CẢ
                       <FaArrowRight />
                     </Link>

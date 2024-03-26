@@ -1,33 +1,34 @@
 export const ROUTERS = {
   USER: {
-    LOGIN: 'login',
-    HOME: '',
-    PROFILE: 'Thong-tin-ca-nhan',
+    LOGIN: '/login',
+    HOME: '/',
+    PROFILE: '/Thong-tin-ca-nhan',
     ABOUT: {
-      PATH: 'About-us',
+      PATH: '/About-us',
       RECRUIT: {
-        PATH: 'About-us/recruit',
-        POSITION: 'About-us/recruit/position',
+        PATH: '/About-us/recruit',
+        POSITION: '/About-us/recruit/position',
       },
     },
     CATEGORY: {
-      PATH: 'category',
-      DETAIL: 'category/Product-type/Product-detail',
-      TYPE: 'category/Product-type',
+      PATH: '/category',
+      DETAIL: '/category/Product-type/Product-detail',
+      TYPE: '/category/Product-type',
     },
     DESIGN: {
-      PATH: 'design',
-      LOGO: 'design/logo',
+      PATH: '/design',
+      LOGO: '/logo',
     },
-    PROJECT: 'Dự-án',
-    SOURCE: 'Tài-nguyên',
-    POLICY: 'policy',
-    ORDER: 'order',
+    PROJECT: '/Dự-án',
+    SOURCE: '/Tài-nguyên',
+    POLICY: '/policy',
+    ORDER: '/order',
   },
   ADMIN: {
-    PATH: 'system/admin',
+    PATH: '/system/admin',
   },
 };
+
 export const getBase64 = file =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
