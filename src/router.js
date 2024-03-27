@@ -71,23 +71,26 @@ const renderUserRouter = () => {
       component: <AdminPage />,
       hideHeader: true,
       hideFooter: true,
+      isPrivate: true,
     },
   ];
 
   return (
     <>
       <Routes>
-        {userRouters.map((item, key) => (
-          <Route
-            key={key}
-            path={item.path}
-            element={
-              <MasterLayout hideHeader={item.hideHeader} hideFooter={item.hideFooter}>
-                {item.component}
-              </MasterLayout>
-            }
-          />
-        ))}
+        {userRouters.map((item, key) => {
+          return (
+            <Route
+              key={key}
+              path={item.path}
+              element={
+                <MasterLayout hideHeader={item.hideHeader} hideFooter={item.hideFooter}>
+                  {item.component}
+                </MasterLayout>
+              }
+            />
+          );
+        })}
       </Routes>
     </>
   );

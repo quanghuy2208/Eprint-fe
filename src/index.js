@@ -6,12 +6,15 @@ import { persistor, store } from './redux/store';
 import RouterCustom from './router';
 import './style/style.scss';
 import './style/grid.scss';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <RouterCustom />
-    </BrowserRouter>
+    <PersistGate loading={null} persistor={persistor}>
+      <BrowserRouter>
+        <RouterCustom />
+      </BrowserRouter>
+    </PersistGate>
   </Provider>,
 );

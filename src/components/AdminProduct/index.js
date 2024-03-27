@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Modal } from 'antd';
+import { Button, Form } from 'antd';
 import { AppstoreAddOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import TableComponent from '../TableComponent/index';
 import InputComponent from '../InputComponent/index';
@@ -8,8 +8,14 @@ import * as ProductService from '../../services/ProductService';
 import { getBase64 } from '../../utils/router';
 import { WrapperUploadFile } from './style.js';
 import axios from 'axios';
+import ModalComponent from '../ModalComponent/index.js';
+import { axiosJWT } from '../../services/UserService.js';
 
 const AdminProduct = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [rowSelected, setRowSelected] = useState('');
+  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
+  const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
   const inittial = () => ({
     name: '',
     type: '',
@@ -17,21 +23,17 @@ const AdminProduct = () => {
     description: '',
     image: '',
   });
-  const [form] = Form.useForm();
-  const [isOpenDrawer, setIsOpenDrawer] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isConfirm, setIsConfirm] = useState(false);
   const [stateProduct, setStateProduct] = useState(inittial());
   const [stateProductDetails, setStateProductDetails] = useState(inittial());
+  const [form] = Form.useForm();
   const [data, setData] = useState([]);
-  const [rowSelected, setRowSelected] = useState('');
   const showModal = () => {
     setIsModalOpen(true);
   };
 
   const createProduct = async () => {
     try {
-      const res = await axios.post('http://localhost:3001/api/product/create', {
+      const res = await axios.post(`http://localhost:3001/api/product/create`, {
         name: stateProduct.name,
         type: stateProduct.type,
         price: stateProduct.price,
@@ -41,6 +43,7 @@ const AdminProduct = () => {
 
       if (res.data.status === 'OK') {
         handleCancel();
+        fetchData();
       } else {
         alert(res.data.message);
       }
@@ -53,6 +56,9 @@ const AdminProduct = () => {
   };
   const onUpdate = () => {
     updateProduct();
+  };
+  const onDelete = () => {
+    deleteProduct();
   };
   const updateProduct = async () => {
     try {
@@ -74,14 +80,22 @@ const AdminProduct = () => {
       console.error('Error occurred while signing in:', error);
     }
   };
+  const deleteProduct = async () => {
+    try {
+      const res = await axiosJWT.delete(`${process.env.REACT_APP_API_URL}/product/delete/${rowSelected}`, {});
+      if (res.data.status === 'OK') {
+        handleCancelDelete();
+        fetchData();
+      } else {
+        alert(res.data.message);
+      }
+    } catch (error) {
+      console.error('Error occurred while signing in:', error);
+    }
+  };
   useEffect(() => {
     fetchData();
   }, []);
-  useEffect(() => {
-    if (rowSelected) {
-      fetchGetDetailsProduct(rowSelected);
-    }
-  }, [rowSelected]);
   useEffect(() => {
     if (!isModalOpen) {
       form.setFieldsValue(stateProductDetails);
@@ -89,6 +103,13 @@ const AdminProduct = () => {
       form.setFieldsValue(inittial());
     }
   }, [form, stateProductDetails, isModalOpen]);
+
+  useEffect(() => {
+    if (rowSelected && isOpenDrawer) {
+      fetchGetDetailsProduct(rowSelected);
+    }
+  }, [rowSelected, isOpenDrawer]);
+
   const fetchData = async () => {
     try {
       const response = await axios.get('http://localhost:3001/api/product/get-all');
@@ -115,10 +136,15 @@ const AdminProduct = () => {
         <DeleteOutlined
           style={{ color: 'red', fontSize: '3rem', cursor: 'pointer' }}
           onClick={() => {
-            setIsConfirm(true);
+            setIsModalOpenDelete(true);
           }}
         />
-        <EditOutlined style={{ color: 'orange', fontSize: '3rem', cursor: 'pointer' }} onClick={handleDetailsProduct} />
+        <EditOutlined
+          style={{ color: 'orange', fontSize: '3rem', cursor: 'pointer' }}
+          onClick={() => {
+            setIsOpenDrawer(true);
+          }}
+        />
       </div>
     );
   };
@@ -133,6 +159,10 @@ const AdminProduct = () => {
     setIsModalOpen(false);
     form.resetFields();
   };
+  const handleCancelDelete = () => {
+    setIsModalOpenDelete(false);
+  };
+
   const handleCloseDrawer = () => {
     setStateProductDetails({
       name: '',
@@ -224,9 +254,9 @@ const AdminProduct = () => {
           }}
         />
       </div>
-      <Modal title="Tạo sản phẩm" open={isModalOpen} onCancel={handleCancel} footer={null}>
+      <ModalComponent title="Tạo sản phẩm" open={isModalOpen} onCancel={handleCancel} footer={null}>
         <Form
-          name="basic"
+          name="createProductForm"
           labelCol={{
             span: 6,
           }}
@@ -250,7 +280,7 @@ const AdminProduct = () => {
                 message: 'Please input your product name!',
               },
             ]}>
-            <InputComponent value={stateProduct.name} onChange={handleOnchange} name="name" />
+            <InputComponent value={stateProduct['name']} onChange={handleOnchange} name="name" />
           </Form.Item>
 
           <Form.Item
@@ -322,10 +352,10 @@ const AdminProduct = () => {
             </Button>
           </Form.Item>
         </Form>
-      </Modal>
+      </ModalComponent>
       <DrawerComponent title="Chi tiết sản phẩm" isOpen={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} width="90%">
         <Form
-          name="basic"
+          name="updateProductForm"
           labelCol={{
             span: 2,
           }}
@@ -349,7 +379,7 @@ const AdminProduct = () => {
                 message: 'Please input your product name!',
               },
             ]}>
-            <InputComponent value={stateProductDetails.name} onChange={handleOnchangeDetails} name="name" />
+            <InputComponent value={stateProductDetails['name']} onChange={handleOnchangeDetails} name="name" />
           </Form.Item>
 
           <Form.Item
@@ -361,7 +391,7 @@ const AdminProduct = () => {
                 message: 'Please input your product type!',
               },
             ]}>
-            <InputComponent value={stateProductDetails.type} onChange={handleOnchangeDetails} name="type" />
+            <InputComponent value={stateProductDetails['type']} onChange={handleOnchangeDetails} name="type" />
           </Form.Item>
           <Form.Item
             label="Price"
@@ -422,6 +452,9 @@ const AdminProduct = () => {
           </Form.Item>
         </Form>
       </DrawerComponent>
+      <ModalComponent title="Xóa sản phẩm" open={isModalOpenDelete} onCancel={handleCancelDelete} onOk={onDelete}>
+        <div>Bạn có chắc chắn muốn xóa sản phẩm này không ?</div>
+      </ModalComponent>
     </>
   );
 };

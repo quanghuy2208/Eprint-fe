@@ -11,8 +11,11 @@ import AwesomeSlider from 'react-awesome-slider';
 import 'react-awesome-slider/dist/styles.css';
 import './style.scss';
 import { ROUTERS } from '../../../utils/router';
+import { useSelector } from 'react-redux';
 
 const HomePage = () => {
+  const product = useSelector(state => state.product);
+  console.log('🚀 ~ HomePage ~ product:', product);
   return (
     <>
       <div className="grid ">

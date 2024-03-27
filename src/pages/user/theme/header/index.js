@@ -16,12 +16,14 @@ import { images } from '../../../../img/index';
 import { Popover } from 'antd';
 import * as UserService from '../../../../services/UserService';
 import { resetUser } from '../../../../redux/slices/userSlice';
+import { searchProduct } from '../../../../redux/slices/productSlice';
 import { useDispatch } from 'react-redux';
 const userData = localStorage.getItem('user');
 const user = userData ? JSON.parse(userData) : null;
 const Header = () => {
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
+  const [isShowCategories, setShowCategories] = useState(false);
+  const [search, setSearch] = useState('');
   const [menus] = useState([
     {
       name: 'Về Eprint',
@@ -164,8 +166,7 @@ const Header = () => {
       path: ROUTERS.USER.POLICY,
     },
   ]);
-  const [isShowCategories, setShowCategories] = useState(false);
-
+  const dispatch = useDispatch();
   const handleLogout = async () => {
     setLoading(true);
     await UserService.logoutUser();
@@ -174,10 +175,14 @@ const Header = () => {
   };
   const content = (
     <div>
-      <p onClick={handleLogout}>Đăng xuất</p>
       <p>Hồ sơ</p>
+      <p onClick={handleLogout}>Đăng xuất</p>
     </div>
   );
+  const onSearch = e => {
+    setSearch(e.target.value);
+    dispatch(searchProduct(e.target.value));
+  };
   return (
     <div>
       <div className="grid wide header__top">
@@ -188,7 +193,7 @@ const Header = () => {
           <div className="col l-6 search">
             <form action="#" className="row">
               <div className="group">
-                <input type="text" placeholder="Nhập từ khóa cần tìm"></input>
+                <input type="text" placeholder="Nhập từ khóa cần tìm" onChange={onSearch}></input>
                 <button type="submit" className="button-submit">
                   Tìm kiếm
                 </button>
