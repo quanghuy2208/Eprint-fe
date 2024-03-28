@@ -18,8 +18,10 @@ import * as UserService from '../../../../services/UserService';
 import { resetUser } from '../../../../redux/slices/userSlice';
 import { searchProduct } from '../../../../redux/slices/productSlice';
 import { useDispatch } from 'react-redux';
-const userData = localStorage.getItem('user');
-const user = userData ? JSON.parse(userData) : null;
+import { getState } from '../../../../redux/utilredux';
+const allState = getState();
+const user = allState.user;
+console.log('🚀 ~ user:', user);
 const Header = () => {
   const [loading, setLoading] = useState(false);
   const [isShowCategories, setShowCategories] = useState(false);
@@ -175,8 +177,10 @@ const Header = () => {
   };
   const content = (
     <div>
-      <p>Hồ sơ</p>
-      <p onClick={handleLogout}>Đăng xuất</p>
+      <p style={{ cursor: 'pointer' }}>Hồ sơ</p>
+      <p style={{ cursor: 'pointer' }} onClick={handleLogout}>
+        Đăng xuất
+      </p>
     </div>
   );
   const onSearch = e => {
@@ -211,7 +215,7 @@ const Header = () => {
                   <BsPerson className="header__top-icon" />
                 </li>
                 {user?.name ? (
-                  <Popover content={content} title="title" trigger="click">
+                  <Popover content={content} trigger="click">
                     <div className="user-detail">{user.name}</div>
                   </Popover>
                 ) : (

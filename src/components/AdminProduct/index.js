@@ -51,12 +51,6 @@ const AdminProduct = () => {
       console.error('Error occurred while signing in:', error);
     }
   };
-  const onFinish = () => {
-    createProduct();
-  };
-  const onUpdate = () => {
-    updateProduct();
-  };
   const onDelete = () => {
     deleteProduct();
   };
@@ -207,12 +201,7 @@ const AdminProduct = () => {
       image: file.preview,
     });
   };
-  const handleDetailsProduct = () => {
-    if (rowSelected) {
-      fetchGetDetailsProduct();
-    }
-    setIsOpenDrawer(true);
-  };
+
   const columns = [
     {
       title: 'Name',
@@ -268,7 +257,6 @@ const AdminProduct = () => {
             flexDirection: 'column',
             alignItems: 'stretch',
           }}
-          onFinish={onFinish}
           autoComplete="on"
           form={form}>
           <Form.Item
@@ -347,7 +335,7 @@ const AdminProduct = () => {
               offset: 20,
               span: 16,
             }}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" onClick={createProduct}>
               Submit
             </Button>
           </Form.Item>
@@ -367,7 +355,6 @@ const AdminProduct = () => {
             flexDirection: 'column',
             alignItems: 'stretch',
           }}
-          onFinish={onUpdate}
           autoComplete="on"
           form={form}>
           <Form.Item
@@ -446,7 +433,7 @@ const AdminProduct = () => {
               offset: 20,
               span: 16,
             }}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary--update" htmlType="submit" onClick={updateProduct}>
               Apply
             </Button>
           </Form.Item>

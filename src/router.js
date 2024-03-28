@@ -14,7 +14,11 @@ import MasterLayout from './pages/user/theme/masterLayout';
 import { ROUTERS } from './utils/router';
 import { Routes, Route } from 'react-router-dom';
 import AdminPage from './pages/admin/adminPage/index.js';
+import { getState } from './redux/utilredux.js';
 const renderUserRouter = () => {
+  const allState = getState();
+  const user = allState.user;
+  console.log('🚀 ~ renderUserRouter ~ user:', user.isAdmin);
   const userRouters = [
     {
       path: ROUTERS.USER.LOGIN,
@@ -79,7 +83,8 @@ const renderUserRouter = () => {
     <>
       <Routes>
         {userRouters.map((item, key) => {
-          return (
+          const ischeckAuth = !item.isPrivate || (user && user.isAdmin);
+          return ischeckAuth ? (
             <Route
               key={key}
               path={item.path}
@@ -89,7 +94,7 @@ const renderUserRouter = () => {
                 </MasterLayout>
               }
             />
-          );
+          ) : null;
         })}
       </Routes>
     </>
