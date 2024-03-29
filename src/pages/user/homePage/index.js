@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { banner, images } from '../../../img/index';
 import { CiClock2 } from 'react-icons/ci';
 import { FaRegEye } from 'react-icons/fa';
@@ -12,10 +12,33 @@ import 'react-awesome-slider/dist/styles.css';
 import './style.scss';
 import { ROUTERS } from '../../../utils/router';
 import { useSelector } from 'react-redux';
+import * as ProductService from '../../../services/ProductService';
+import { useDebounce } from '../../../hooks/useDebounce';
 
 const HomePage = () => {
-  const product = useSelector(state => state.product);
-  console.log('🚀 ~ HomePage ~ product:', product);
+  const searchProduct = useSelector(state => state?.product?.search);
+  const searchDebounce = useDebounce(searchProduct, 1000);
+  const [typeProducts, setTypeProducts] = useState([]);
+  const refSearch = useRef();
+  const fetchProductAll = async search => {
+    const res = await ProductService.getAllProduct(search);
+    return res;
+  };
+  const fetchAllTypeProduct = async () => {
+    const res = await ProductService.getAllTypeProduct();
+    if (res?.status === 'OK') {
+      setTypeProducts(res?.data);
+    }
+  };
+  useEffect(() => {
+    if (refSearch.current) {
+      fetchProductAll(searchDebounce);
+    }
+    refSearch.current = true;
+  }, [searchDebounce]);
+  useEffect(() => {
+    fetchAllTypeProduct();
+  }, []);
   return (
     <>
       <div className="grid ">

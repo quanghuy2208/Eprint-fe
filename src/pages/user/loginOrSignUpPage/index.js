@@ -1,17 +1,33 @@
 import React, { useRef, useState } from 'react';
 import './style.scss';
 import axios from 'axios';
+// import { jwtDecode } from 'jwt-decode';
+import { updateUser } from '../../../services/UserService';
+import * as UserService from '../../../services/UserService';
+// import { useDispatch, useSelector } from 'react-redux';
 
 const LoginPage = () => {
   const [userName, setUserName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassWord] = useState();
+  // const [userInform, setUserInform] = useState();
   const wrapperRef = useRef(null);
-
+  // const dispatch = useDispatch();
+  // const user = useSelector(state => state.user);
+  // useEffect(() => {
+  //   localStorage.setItem('access_token', JSON.stringify(userInform?.access_token));
+  //   localStorage.setItem('refresh_token', JSON.stringify(userInform?.refresh_token));
+  //   if (userInform?.access_token) {
+  //     const decoded = jwtDecode(userInform?.access_token);
+  //     if (decoded?.id) {
+  //       handleGetDetailsUser(decoded?.id, userInform?.access_token);
+  //     }
+  //   }
+  // });
   const signUp = async event => {
     event.preventDefault();
     try {
-      const res = await axios.post('http://localhost:3001/api/user/sign-up', {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/sign-up`, {
         name: userName,
         email: email,
         password: password,
@@ -29,21 +45,23 @@ const LoginPage = () => {
   const signIn = async event => {
     event.preventDefault();
     try {
-      const res = await axios.post('http://localhost:3001/api/user/sign-in', {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/sign-in`, {
         email: email,
         password: password,
       });
 
       if (res.data.status === 'OK') {
+        // setUserInform(res);
         const userData = {
           email: email,
           accessToken: res.data.access_token,
           refreshToken: res.data.refresh_token,
+          isAdmin: res.data.isAdmin,
         };
 
         localStorage.setItem('user', JSON.stringify(userData));
 
-        const searchRes = await axios.get('http://localhost:3001/api/user/get-details-by-email', {
+        const searchRes = await axios.get(`${process.env.REACT_APP_API_URL}/user/get-details-by-email`, {
           params: {
             email: email,
           },
@@ -64,6 +82,13 @@ const LoginPage = () => {
       console.error('Error occurred while signing in:', error);
     }
   };
+
+  // const handleGetDetailsUser = async (id, token) => {
+  //   const storage = localStorage.getItem('refresh_token');
+  //   const refreshToken = JSON.parse(storage);
+  //   const res = await UserService.getDetailsUser(id, token);
+  //   dispatch(updateUser({ ...res?.data, access_token: token, refreshToken }));
+  // };
 
   const handleSignInClick = () => {
     if (wrapperRef.current) {

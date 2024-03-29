@@ -10,6 +10,7 @@ import { CiCircleRemove } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
 import './style.scss';
 import './function.js';
+import { Pagination } from 'antd';
 
 const ProductTypePage = () => {
   const [modal, setModal] = useState(false);
@@ -182,6 +183,9 @@ const ProductTypePage = () => {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="row product_paginate">
+            <Pagination defaultCurrent={1} total={100} style={{ textAlign: 'center', marginTop: '30px' }} />
           </div>
         </div>
       </div>

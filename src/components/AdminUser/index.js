@@ -27,13 +27,10 @@ const AdminUser = () => {
   const [stateUserDetails, setStateUserDetails] = useState(inittial());
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
 
   const createUser = async () => {
     try {
-      const res = await axios.post(`http://localhost:3001/api/user/sign-up`, {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/sign-up`, {
         name: stateUser.name,
         email: stateUser.email,
         password: stateUser.password,
@@ -50,9 +47,7 @@ const AdminUser = () => {
       console.error('Error occurred while signing in:', error);
     }
   };
-  const onFinish = () => {
-    createUser();
-  };
+
   const onUpdate = () => {
     updateUser();
   };
@@ -61,14 +56,15 @@ const AdminUser = () => {
   };
   const updateUser = async () => {
     try {
-      const res = await axios.put(`http://localhost:3001/api/user/update-user/${rowSelected}`, {
+      const res = await axios.put(`${process.env.REACT_APP_API_URL}/user/update-user/${rowSelected}`, {
         name: stateUserDetails.name,
-        type: stateUserDetails.type,
-        price: stateUserDetails.price,
-        description: stateUserDetails.description,
-        image: stateUserDetails.image,
+        email: stateUserDetails.email,
+        password: stateUserDetails.password,
+        isAdmin: stateUserDetails.isAdmin,
+        avatar: stateUserDetails.avatar,
       });
 
+      console.log('🚀 ~ updateUser ~ res:', res);
       if (res.data.status === 'OK') {
         handleCloseDrawer();
         fetchData();
@@ -110,7 +106,7 @@ const AdminUser = () => {
   }, [form, stateUserDetails, isModalOpen]);
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/user/getAll');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/getAll`);
       setData(response.data.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -123,7 +119,7 @@ const AdminUser = () => {
         name: res?.data?.name,
         email: res?.data?.email,
         password: res?.data?.password,
-        image: res?.data?.image,
+        avatar: res?.data?.avatar,
       });
     }
   };
@@ -150,7 +146,7 @@ const AdminUser = () => {
       name: '',
       email: '',
       password: '',
-      image: '',
+      avatar: '',
     });
     setIsModalOpen(false);
     form.resetFields();
@@ -164,7 +160,7 @@ const AdminUser = () => {
       name: '',
       email: '',
       password: '',
-      image: '',
+      avatar: '',
     });
     setIsOpenDrawer(false);
     form.resetFields();
@@ -189,7 +185,7 @@ const AdminUser = () => {
     }
     setStateUser({
       ...stateUser,
-      image: file.preview,
+      avatar: file.preview,
     });
   };
   const handleOnchangeAvatarDetails = async ({ fileList }) => {
@@ -199,7 +195,7 @@ const AdminUser = () => {
     }
     setStateUserDetails({
       ...stateUserDetails,
-      image: file.preview,
+      avatar: file.preview,
     });
   };
   const handleDetailsUser = () => {
@@ -389,8 +385,8 @@ const AdminUser = () => {
             <InputComponent value={stateUserDetails.password} onChange={handleOnchangeDetails} name="password" />
           </Form.Item>
           <Form.Item
-            label="Image"
-            name="image"
+            label="Avatar"
+            name="avatar"
             rules={[
               {
                 required: true,
@@ -399,9 +395,9 @@ const AdminUser = () => {
             ]}>
             <WrapperUploadFile onChange={handleOnchangeAvatarDetails} maxCount={1}>
               <Button>Select File</Button>
-              {stateUserDetails?.image && (
+              {stateUserDetails?.avatar && (
                 <img
-                  src={stateUserDetails?.image}
+                  src={stateUserDetails?.avatar}
                   style={{
                     height: '60px',
                     width: '60px',

@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import './style.scss';
 import { BsHandbag, BsPerson, BsNewspaper, BsBoxSeam } from 'react-icons/bs';
 import { ImCalendar, ImProfile } from 'react-icons/im';
@@ -15,15 +15,17 @@ import { ROUTERS } from '../../../../utils/router';
 import { images } from '../../../../img/index';
 import { Popover } from 'antd';
 import * as UserService from '../../../../services/UserService';
-import { resetUser } from '../../../../redux/slices/userSlice';
 import { searchProduct } from '../../../../redux/slices/productSlice';
 import { useDispatch } from 'react-redux';
-import { getState } from '../../../../redux/utilredux';
-const allState = getState();
-const user = allState.user;
-console.log('🚀 ~ user:', user);
+
 const Header = () => {
-  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('user'));
+    if (userData) {
+      setUser(userData);
+    }
+  }, []);
   const [isShowCategories, setShowCategories] = useState(false);
   const [search, setSearch] = useState('');
   const [menus] = useState([
@@ -170,14 +172,14 @@ const Header = () => {
   ]);
   const dispatch = useDispatch();
   const handleLogout = async () => {
-    setLoading(true);
     await UserService.logoutUser();
-    dispatch(resetUser());
-    setLoading(false);
+    localStorage.removeItem('user');
+    setUser(null);
   };
   const content = (
     <div>
       <p style={{ cursor: 'pointer' }}>Hồ sơ</p>
+      {user?.isAdmin && <Link to={'/system/admin'}>Quản lý hệ thống</Link>}
       <p style={{ cursor: 'pointer' }} onClick={handleLogout}>
         Đăng xuất
       </p>

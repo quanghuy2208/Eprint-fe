@@ -14,11 +14,15 @@ import MasterLayout from './pages/user/theme/masterLayout';
 import { ROUTERS } from './utils/router';
 import { Routes, Route } from 'react-router-dom';
 import AdminPage from './pages/admin/adminPage/index.js';
-import { getState } from './redux/utilredux.js';
-const renderUserRouter = () => {
-  const allState = getState();
-  const user = allState.user;
-  console.log('🚀 ~ renderUserRouter ~ user:', user.isAdmin);
+import React, { useEffect, useState } from 'react';
+const RenderUserRouter = () => {
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem('user'));
+    if (userData) {
+      setUser(userData);
+    }
+  }, []);
   const userRouters = [
     {
       path: ROUTERS.USER.LOGIN,
@@ -101,6 +105,6 @@ const renderUserRouter = () => {
   );
 };
 const RouterCustom = () => {
-  return renderUserRouter();
+  return RenderUserRouter();
 };
 export default RouterCustom;

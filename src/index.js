@@ -7,6 +7,7 @@ import RouterCustom from './router';
 import './style/style.scss';
 import './style/grid.scss';
 import { PersistGate } from 'redux-persist/integration/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

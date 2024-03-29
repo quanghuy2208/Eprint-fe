@@ -26,7 +26,7 @@ export const userSlice = createSlice({
       state.avatar = avatar ? avatar : state.avatar;
       state.id = _id ? _id : state.id;
       state.access_token = access_token ? access_token : state.access_token;
-      state.isAdmin = isAdmin;
+      state.isAdmin = isAdmin ? isAdmin : state.isAdmin;
       state.city = city ? city : state.city;
       state.refreshToken = refreshToken ? refreshToken : state.refreshToken;
     },

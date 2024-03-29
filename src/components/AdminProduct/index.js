@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Form } from 'antd';
-import { AppstoreAddOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, Form, Select, Space } from 'antd';
+import { AppstoreAddOutlined, DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
 import TableComponent from '../TableComponent/index';
 import InputComponent from '../InputComponent/index';
 import DrawerComponent from '../DrawerComponent/index';
 import * as ProductService from '../../services/ProductService';
-import { getBase64 } from '../../utils/router';
+import { getBase64, renderOptions } from '../../utils/router';
 import { WrapperUploadFile } from './style.js';
 import axios from 'axios';
 import ModalComponent from '../ModalComponent/index.js';
@@ -16,26 +16,29 @@ const AdminProduct = () => {
   const [rowSelected, setRowSelected] = useState('');
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
+  const [typeProducts, setTypeProducts] = useState([]);
   const inittial = () => ({
     name: '',
     type: '',
     price: '',
     description: '',
     image: '',
+    newType: '',
   });
   const [stateProduct, setStateProduct] = useState(inittial());
   const [stateProductDetails, setStateProductDetails] = useState(inittial());
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
+  const searchInput = useRef(null);
   const showModal = () => {
     setIsModalOpen(true);
   };
 
   const createProduct = async () => {
     try {
-      const res = await axios.post(`http://localhost:3001/api/product/create`, {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/product/create`, {
         name: stateProduct.name,
-        type: stateProduct.type,
+        type: stateProduct.type === 'add_type' ? stateProduct.newType : stateProduct.type,
         price: stateProduct.price,
         description: stateProduct.description,
         image: stateProduct.image,
@@ -56,7 +59,7 @@ const AdminProduct = () => {
   };
   const updateProduct = async () => {
     try {
-      const res = await axios.put(`http://localhost:3001/api/product/update/${rowSelected}`, {
+      const res = await axios.put(`${process.env.REACT_APP_API_URL}/product/update/${rowSelected}`, {
         name: stateProductDetails.name,
         type: stateProductDetails.type,
         price: stateProductDetails.price,
@@ -103,10 +106,12 @@ const AdminProduct = () => {
       fetchGetDetailsProduct(rowSelected);
     }
   }, [rowSelected, isOpenDrawer]);
-
+  useEffect(() => {
+    fetchAllTypeProduct();
+  }, []);
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/api/product/get-all');
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all`);
       setData(response.data.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -122,6 +127,12 @@ const AdminProduct = () => {
         description: res?.data?.description,
         image: res?.data?.image,
       });
+    }
+  };
+  const fetchAllTypeProduct = async () => {
+    const res = await ProductService.getAllTypeProduct();
+    if (res?.status === 'OK') {
+      setTypeProducts(res?.data);
     }
   };
   const renderAction = () => {
@@ -201,16 +212,83 @@ const AdminProduct = () => {
       image: file.preview,
     });
   };
-
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+  };
+  const handleReset = clearFilters => {
+    clearFilters();
+  };
+  const handleChangeSelect = value => {
+    setStateProduct({
+      ...stateProduct,
+      type: value,
+    });
+  };
+  const getColumnSearchProps = dataIndex => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={e => e.stopPropagation()}>
+        <InputComponent
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: 'block',
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}>
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}>
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: filtered => (
+      <SearchOutlined
+        style={{
+          color: filtered ? '#1890ff' : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownOpenChange: visible => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+  });
   const columns = [
     {
       title: 'Name',
       dataIndex: 'name',
-      render: text => <a>{text}</a>,
+      sorter: (a, b) => a.name.length - b.name.length,
+      ...getColumnSearchProps('name'),
     },
     {
       title: 'Price',
       dataIndex: 'price',
+      sorter: (a, b) => a.price - b.price,
     },
     {
       title: 'Type',
@@ -280,8 +358,13 @@ const AdminProduct = () => {
                 message: 'Please input your product type!',
               },
             ]}>
-            <InputComponent value={stateProduct.type} onChange={handleOnchange} name="type" />
+            <Select name="type" value={stateProduct.type} onChange={handleChangeSelect} options={renderOptions(typeProducts)} />
           </Form.Item>
+          {stateProduct.type === 'add_type' && (
+            <Form.Item label="New type" name="newType" rules={[{ required: true, message: 'Please input your type!' }]}>
+              <InputComponent value={stateProduct.newType} onChange={handleOnchange} name="newType" />
+            </Form.Item>
+          )}
           <Form.Item
             label="Price"
             name="price"
@@ -433,7 +516,7 @@ const AdminProduct = () => {
               offset: 20,
               span: 16,
             }}>
-            <Button type="primary--update" htmlType="submit" onClick={updateProduct}>
+            <Button type="primary" htmlType="submit" onClick={updateProduct}>
               Apply
             </Button>
           </Form.Item>
