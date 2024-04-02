@@ -193,9 +193,9 @@ const Header = () => {
     <div>
       <div className="grid wide header__top">
         <div className="row container">
-          <div className="col l-3 logo-align">
+          <Link to={'/'} className="col l-3 logo-align">
             <img src={images.logo} alt="" />
-          </div>
+          </Link>
           <div className="col l-6 search">
             <form action="#" className="row">
               <div className="group">
@@ -242,67 +242,67 @@ const Header = () => {
                 <ul className={isShowCategories ? 'header__menu__category-list' : 'hidden'}>
                   <li className="header__menu__category-item">
                     <ImCalendar />
-                    <Link to={''} className="header__menu__category-link">
+                    <Link to={'/Product-type/lich-tet'} className="header__menu__category-link">
                       Lịch
                     </Link>
                   </li>
                   <li className="header__menu__category-item">
                     <GrCatalog />
-                    <Link to={''} className="header__menu__category-link">
+                    <Link to={'/Product-type/catalogue'} className="header__menu__category-link">
                       Catalogue
                     </Link>
                   </li>
                   <li className="header__menu__category-item">
                     <ImProfile />
-                    <Link to={''} className="header__menu__category-link">
+                    <Link to={'/Product-type/profile'} className="header__menu__category-link">
                       Profile
                     </Link>
                   </li>
                   <li className="header__menu__category-item">
                     <BsNewspaper />
-                    <Link to={''} className="header__menu__category-link">
+                    <Link to={'/Product-type/brochure'} className="header__menu__category-link">
                       Brochure/Tờ gấp
                     </Link>
                   </li>
                   <li className="header__menu__category-item">
                     <BsBoxSeam />
-                    <Link to={''} className="header__menu__category-link">
+                    <Link to={'/Product-type/hop'} className="header__menu__category-link">
                       Hộp
                     </Link>
                   </li>
                   <li className="header__menu__category-item">
                     <MdAssistantPhoto />
-                    <Link to={''} className="header__menu__category-link">
+                    <Link to={'/Product-type/standee'} className="header__menu__category-link">
                       Standee
                     </Link>
                   </li>
                   <li className="header__menu__category-item">
                     <PiSelectionBackgroundBold />
-                    <Link to={''} className="header__menu__category-link">
+                    <Link to={'/Product-type/backdrop'} className="header__menu__category-link">
                       Backdrop
                     </Link>
                   </li>
                   <li className="header__menu__category-item">
                     <FaRegPaperPlane />
-                    <Link to={''} className="header__menu__category-link">
+                    <Link to={'/Product-type/to-roi'} className="header__menu__category-link">
                       Tờ rơi
                     </Link>
                   </li>
                   <li className="header__menu__category-item">
                     <GiTicket />
-                    <Link to={''} className="header__menu__category-link">
+                    <Link to={'/Product-type/voucher'} className="header__menu__category-link">
                       Voucher
                     </Link>
                   </li>
                   <li className="header__menu__category-item">
                     <RiEmojiStickerLine />
-                    <Link to={''} className="header__menu__category-link">
+                    <Link to={'/Product-type/sticker'} className="header__menu__category-link">
                       Sticker
                     </Link>
                   </li>
                   <li className="header__menu__category-item">
                     <GiPostStamp />
-                    <Link to={''} className="header__menu__category-link">
+                    <Link to={'/Product-type/tem-nhan'} className="header__menu__category-link">
                       Tem nhãn
                     </Link>
                   </li>

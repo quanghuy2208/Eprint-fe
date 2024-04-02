@@ -10,6 +10,7 @@ import { WrapperUploadFile } from './style.js';
 import axios from 'axios';
 import ModalComponent from '../ModalComponent/index.js';
 import { axiosJWT } from '../../services/UserService.js';
+import { generateSlug } from '../../utils/index.js';
 
 const AdminProduct = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,11 +20,12 @@ const AdminProduct = () => {
   const [typeProducts, setTypeProducts] = useState([]);
   const inittial = () => ({
     name: '',
-    type: '',
+    typeName: '',
     price: '',
     description: '',
     image: '',
     newType: '',
+    typeSlug: '',
   });
   const [stateProduct, setStateProduct] = useState(inittial());
   const [stateProductDetails, setStateProductDetails] = useState(inittial());
@@ -36,13 +38,17 @@ const AdminProduct = () => {
 
   const createProduct = async () => {
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/product/create`, {
+      const dataProduct = {
         name: stateProduct.name,
-        type: stateProduct.type === 'add_type' ? stateProduct.newType : stateProduct.type,
+        typeName: stateProduct.typeName === 'add_type' ? stateProduct.newType : stateProduct.typeName,
         price: stateProduct.price,
         description: stateProduct.description,
         image: stateProduct.image,
-      });
+      };
+      const typeSlug = generateSlug(dataProduct.typeName);
+      dataProduct.typeSlug = typeSlug;
+
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/product/create`, dataProduct);
 
       if (res.data.status === 'OK') {
         handleCancel();
@@ -61,7 +67,7 @@ const AdminProduct = () => {
     try {
       const res = await axios.put(`${process.env.REACT_APP_API_URL}/product/update/${rowSelected}`, {
         name: stateProductDetails.name,
-        type: stateProductDetails.type,
+        typeName: stateProductDetails.typeName,
         price: stateProductDetails.price,
         description: stateProductDetails.description,
         image: stateProductDetails.image,
@@ -122,7 +128,7 @@ const AdminProduct = () => {
     if (res?.data) {
       setStateProductDetails({
         name: res?.data?.name,
-        type: res?.data?.type,
+        typeName: res?.data?.typeName,
         price: res?.data?.price,
         description: res?.data?.description,
         image: res?.data?.image,
@@ -156,7 +162,7 @@ const AdminProduct = () => {
   const handleCancel = () => {
     setStateProduct({
       name: '',
-      type: '',
+      typeName: '',
       price: '',
       description: '',
       image: '',
@@ -171,7 +177,7 @@ const AdminProduct = () => {
   const handleCloseDrawer = () => {
     setStateProductDetails({
       name: '',
-      type: '',
+      typeName: '',
       price: '',
       description: '',
       image: '',
@@ -221,7 +227,7 @@ const AdminProduct = () => {
   const handleChangeSelect = value => {
     setStateProduct({
       ...stateProduct,
-      type: value,
+      typeName: value,
     });
   };
   const getColumnSearchProps = dataIndex => ({
@@ -292,7 +298,7 @@ const AdminProduct = () => {
     },
     {
       title: 'Type',
-      dataIndex: 'type',
+      dataIndex: 'typeName',
     },
     {
       title: 'Action',
@@ -351,16 +357,16 @@ const AdminProduct = () => {
 
           <Form.Item
             label="Type"
-            name="type"
+            name="typeName"
             rules={[
               {
                 required: true,
                 message: 'Please input your product type!',
               },
             ]}>
-            <Select name="type" value={stateProduct.type} onChange={handleChangeSelect} options={renderOptions(typeProducts)} />
+            <Select name="typeName" value={stateProduct.typeName} onChange={handleChangeSelect} options={renderOptions(typeProducts)} />
           </Form.Item>
-          {stateProduct.type === 'add_type' && (
+          {stateProduct.typeName === 'add_type' && (
             <Form.Item label="New type" name="newType" rules={[{ required: true, message: 'Please input your type!' }]}>
               <InputComponent value={stateProduct.newType} onChange={handleOnchange} name="newType" />
             </Form.Item>
@@ -454,14 +460,14 @@ const AdminProduct = () => {
 
           <Form.Item
             label="Type"
-            name="type"
+            name="typeName"
             rules={[
               {
                 required: true,
                 message: 'Please input your product type!',
               },
             ]}>
-            <InputComponent value={stateProductDetails['type']} onChange={handleOnchangeDetails} name="type" />
+            <InputComponent value={stateProductDetails['typeName']} onChange={handleOnchangeDetails} name="typeName" />
           </Form.Item>
           <Form.Item
             label="Price"

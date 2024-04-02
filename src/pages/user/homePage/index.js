@@ -6,11 +6,10 @@ import { FaPencilAlt } from 'react-icons/fa';
 import { CiSearch } from 'react-icons/ci';
 import { BsHandbag } from 'react-icons/bs';
 import { CiHeart } from 'react-icons/ci';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AwesomeSlider from 'react-awesome-slider';
 import 'react-awesome-slider/dist/styles.css';
 import './style.scss';
-import { ROUTERS } from '../../../utils/router';
 import { useSelector } from 'react-redux';
 import * as ProductService from '../../../services/ProductService';
 import { useDebounce } from '../../../hooks/useDebounce';
@@ -18,27 +17,39 @@ import { useDebounce } from '../../../hooks/useDebounce';
 const HomePage = () => {
   const searchProduct = useSelector(state => state?.product?.search);
   const searchDebounce = useDebounce(searchProduct, 1000);
-  const [typeProducts, setTypeProducts] = useState([]);
+  const [dataProduct, setDataProduct] = useState([]);
+  const [isActive, setIsActive] = useState('hop-banh-tet');
   const refSearch = useRef();
+  const navigate = useNavigate();
   const fetchProductAll = async search => {
     const res = await ProductService.getAllProduct(search);
     return res;
   };
-  const fetchAllTypeProduct = async () => {
-    const res = await ProductService.getAllTypeProduct();
-    if (res?.status === 'OK') {
-      setTypeProducts(res?.data);
-    }
+  const getAllProduct = async typeProduct => {
+    const res = await ProductService.getAllProduct('', 15, typeProduct);
+    setDataProduct(res.data);
   };
+
   useEffect(() => {
     if (refSearch.current) {
       fetchProductAll(searchDebounce);
     }
     refSearch.current = true;
   }, [searchDebounce]);
+
+  const handleClick = typeProduct => {
+    getAllProduct(typeProduct);
+    setIsActive(typeProduct);
+  };
   useEffect(() => {
-    fetchAllTypeProduct();
-  }, []);
+    getAllProduct(isActive);
+  }, [isActive]);
+  const handleNavigatetype = typeSlug => {
+    navigate(`/Product-type/${typeSlug}`, { state: typeSlug });
+  };
+  const handleNavigateId = id => {
+    navigate(`/Product-detail/${id}`);
+  };
   return (
     <>
       <div className="grid ">
@@ -129,21 +140,41 @@ const HomePage = () => {
           <div className="row">
             <div className="col l-4 category-section">
               <div className="category-align">
-                <div className="category-item">
+                <div
+                  className="category-item"
+                  onClick={() => {
+                    const typeSlug = 'lich-tet';
+                    handleNavigatetype(typeSlug);
+                  }}>
                   <img src={images.calendar} alt="" className="category-item_image"></img>
                   <div className="category__name">Lịch</div>
                 </div>
-                <div className="category-item">
+                <div
+                  className="category-item"
+                  onClick={() => {
+                    const typeSlug = 'hop';
+                    handleNavigatetype(typeSlug);
+                  }}>
                   <img src={images.box} alt="" className="category-item_image"></img>
                   <div className="category__name">Hộp quà</div>
                 </div>
               </div>
-              <div className="category-align">
+              <div
+                className="category-align"
+                onClick={() => {
+                  const typeSlug = 'standee';
+                  handleNavigatetype(typeSlug);
+                }}>
                 <div className="category-item">
                   <img src={images.standee} alt="" className="category-item_image"></img>
                   <div className="category__name">Standee</div>
                 </div>
-                <div className="category-item">
+                <div
+                  className="category-item"
+                  onClick={() => {
+                    const typeSlug = 'tui-giay';
+                    handleNavigatetype(typeSlug);
+                  }}>
                   <img src={images.bag} alt="" className="category-item_image"></img>
                   <div className="category__name">Túi giấy</div>
                 </div>
@@ -151,16 +182,31 @@ const HomePage = () => {
             </div>
             <div className="col l-4 category-section">
               <div className="category-align">
-                <div className="category-item">
+                <div
+                  className="category-item"
+                  onClick={() => {
+                    const typeSlug = 'card-visit';
+                    handleNavigatetype(typeSlug);
+                  }}>
                   <img src={images.card} alt="" className="category-item_image"></img>
                   <div className="category__name">Card</div>
                 </div>
-                <div className="category-item">
+                <div
+                  className="category-item"
+                  onClick={() => {
+                    const typeSlug = 'brochure';
+                    handleNavigatetype(typeSlug);
+                  }}>
                   <img src={images.brochure} alt="" className="category-item_image"></img>
                   <div className="category__name">Tờ gấp</div>
                 </div>
               </div>
-              <div className="category-align">
+              <div
+                className="category-align"
+                onClick={() => {
+                  const typeSlug = 'so-tay';
+                  handleNavigatetype(typeSlug);
+                }}>
                 <div className="category-item">
                   <img src={images.handbook} alt="" className="category-item_image"></img>
                   <div className="category__name">Sổ tay</div>
@@ -232,158 +278,58 @@ const HomePage = () => {
             <div className="suggest-list__box">
               <h2> Sản phẩm in ấn</h2>
               <ul className="suggest-list">
-                <li className="suggest-item">Hộp quà Tết</li>
-                <li className="suggest-item">Hộp rượu</li>
-                <li className="suggest-item">Hộp yến</li>
-                <li className="suggest-item">Hộp trung thu</li>
-                <li className="suggest-item">Standee</li>
-                <Link to={ROUTERS.USER.CATEGORY.PATH}>
-                  <li className="suggest-item">Xem tất cả</li>
-                </Link>
+                <li className={isActive === 'hop-banh-tet' ? 'suggest-item active' : 'suggest-item'} onClick={() => handleClick('hop-banh-tet')}>
+                  Hộp bánh Tết
+                </li>
+                <li className={isActive === 'hop-ruou' ? 'suggest-item active' : 'suggest-item'} onClick={() => handleClick('hop-ruou')}>
+                  Hộp rượu
+                </li>
+                <li className={isActive === 'hop-yen' ? 'suggest-item active' : 'suggest-item'} onClick={() => handleClick('hop-yen')}>
+                  Hộp yến
+                </li>
+                <li className={isActive === 'hop-trung-thu' ? 'suggest-item active' : 'suggest-item'} onClick={() => handleClick('hop-trung-thu')}>
+                  Hộp trung thu
+                </li>
+                <li className={isActive === 'standee' ? 'suggest-item active' : 'suggest-item'} onClick={() => handleClick('standee')}>
+                  Standee
+                </li>
+                <li className="suggest-item" onClick={() => navigate('/category')}>
+                  Xem tất cả
+                </li>
               </ul>
             </div>
           </div>
           <div className="row">
-            <div className="col l-2-4">
-              <div className="product-grid">
-                <div className="product-image">
-                  <img src={images.product} alt="" className="image" />
-                  <ul className="product-links">
-                    <li className="product-link">
-                      <BsHandbag />
-                    </li>
-                    <li className="product-link">
-                      <CiSearch />
-                    </li>
-                  </ul>
-                </div>
-                <div className="product-content">
-                  <h3 className="product-content-title">Hộp rượu nam châm</h3>
-                  <ul>
-                    <li>
-                      <FaRegEye />
-                      18.000
-                    </li>
-                    <li>
-                      <CiHeart />
-                      18.000
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="col l-2-4">
-              <div className="product-grid">
-                <div className="product-image">
-                  <img src={images.product} alt="" className="image" />
-                  <ul className="product-links">
-                    <li className="product-link">
-                      <BsHandbag />
-                    </li>
-                    <li className="product-link">
-                      <CiSearch />
-                    </li>
-                  </ul>
-                </div>
-                <div className="product-content">
-                  <h3 className="product-content-title">Hộp rượu nam châm</h3>
-                  <ul>
-                    <li>
-                      <FaRegEye />
-                      18.000
-                    </li>
-                    <li>
-                      <CiHeart />
-                      18.000
-                    </li>
-                  </ul>
+            {dataProduct.map((item, index) => (
+              <div className="col l-2-4">
+                <div className="product-grid" onClick={() => handleNavigateId(item._id)}>
+                  <div className="product-image">
+                    <img src={item.image} alt="" className="image" />
+                    <ul className="product-links">
+                      <li className="product-link">
+                        <BsHandbag />
+                      </li>
+                      <li className="product-link">
+                        <CiSearch />
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="product-content">
+                    <h3 className="product-content-title">{item.name}</h3>
+                    <ul>
+                      <li>
+                        <FaRegEye />
+                        18.000
+                      </li>
+                      <li>
+                        <CiHeart />
+                        18.000
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col l-2-4">
-              <div className="product-grid">
-                <div className="product-image">
-                  <img src={images.product} alt="" className="image" />
-                  <ul className="product-links">
-                    <li className="product-link">
-                      <BsHandbag />
-                    </li>
-                    <li className="product-link">
-                      <CiSearch />
-                    </li>
-                  </ul>
-                </div>
-                <div className="product-content">
-                  <h3 className="product-content-title">Hộp rượu nam châm</h3>
-                  <ul>
-                    <li>
-                      <FaRegEye />
-                      18.000
-                    </li>
-                    <li>
-                      <CiHeart />
-                      18.000
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="col l-2-4">
-              <div className="product-grid">
-                <div className="product-image">
-                  <img src={images.product} alt="" className="image" />
-                  <ul className="product-links">
-                    <li className="product-link">
-                      <BsHandbag />
-                    </li>
-                    <li className="product-link">
-                      <CiSearch />
-                    </li>
-                  </ul>
-                </div>
-                <div className="product-content">
-                  <h3 className="product-content-title">Hộp rượu nam châm</h3>
-                  <ul>
-                    <li>
-                      <FaRegEye />
-                      18.000
-                    </li>
-                    <li>
-                      <CiHeart />
-                      18.000
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="col l-2-4">
-              <div className="product-grid">
-                <div className="product-image">
-                  <img src={images.product} alt="" className="image" />
-                  <ul className="product-links">
-                    <li className="product-link">
-                      <BsHandbag />
-                    </li>
-                    <li className="product-link">
-                      <CiSearch />
-                    </li>
-                  </ul>
-                </div>
-                <div className="product-content">
-                  <h3 className="product-content-title">Hộp rượu nam châm</h3>
-                  <ul>
-                    <li>
-                      <FaRegEye />
-                      18.000
-                    </li>
-                    <li>
-                      <CiHeart />
-                      18.000
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
           <div className="button-align">
             <button className="animated-button">

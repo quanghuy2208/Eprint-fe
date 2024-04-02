@@ -7,12 +7,34 @@ import { CiSearch } from 'react-icons/ci';
 import { BsHandbag } from 'react-icons/bs';
 import { CiHeart } from 'react-icons/ci';
 import { CiCircleRemove } from 'react-icons/ci';
-import { Link } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import * as ProductService from '../../../services/ProductService';
 import './style.scss';
 import './function.js';
 import { Pagination } from 'antd';
 
 const ProductTypePage = () => {
+  const navigate = useNavigate();
+  const { state } = useLocation();
+  const [products, setProducts] = useState([]);
+  const [paginate, setPaginate] = useState({
+    page: 0,
+    limit: 20,
+    total: 1,
+  });
+  const fetchProductType = async (typeSlug, page, limit) => {
+    const res = await ProductService.getProductType(typeSlug, page, limit);
+    console.log('🚀 ~ fetchProductType ~ res:', res);
+    if (res?.status === 'OK') {
+      setProducts(res?.data);
+      setPaginate({ ...paginate, total: res?.totalPage });
+    } else {
+    }
+  };
+
+  const handleNavigateId = id => {
+    navigate(`/Product-detail/${id}`);
+  };
   const [modal, setModal] = useState(false);
   const toggleModal = () => {
     setModal(!modal);
@@ -25,27 +47,44 @@ const ProductTypePage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  useEffect(() => {
+    if (state) {
+      fetchProductType(state, paginate.page, paginate.limit);
+    }
+  }, [state, paginate.page, paginate.limit]);
+  const onChange = (current, pageSize) => {
+    setPaginate({ ...paginate, page: current - 1, limit: pageSize });
+  };
   return (
     <>
       <div className="grid product">
         <div className="grid wide content">
-          <div>
-            <div className="suggest-header__box">
-              <h1> Home / Lịch tết </h1>
+          {products.map((item, index) => (
+            <div>
+              <div className="suggest-header__box">
+                <h1
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    navigate('/');
+                  }}>
+                  {' '}
+                  Home / {item.typeName}{' '}
+                </h1>
+              </div>
+              <div className="suggest-list__box">
+                <h2> Thư viện {item.typeName}</h2>
+                <ul className="suggest-list">
+                  <li className="suggest-item">Tất cả</li>
+                </ul>
+              </div>
             </div>
-            <div className="suggest-list__box">
-              <h2> Thư viện Lịch tết</h2>
-              <ul className="suggest-list">
-                <li className="suggest-item">Tất cả</li>
-              </ul>
-            </div>
-          </div>
+          ))}
           <div className="row">
-            <div className="col l-2-4">
-              <Link to={'Product-detail'}>
-                <div className="product-grid">
+            {products.map((item, index) => (
+              <div className="col l-2-4">
+                <div className="product-grid" onClick={() => handleNavigateId(item._id)}>
                   <div className="product-image">
-                    <img src={images.product} alt="" className="image" />
+                    <img src={item.image} alt="" className="image" />
                     <ul className="product-links">
                       <li className="product-link">
                         <BsHandbag />
@@ -56,7 +95,7 @@ const ProductTypePage = () => {
                     </ul>
                   </div>
                   <div className="product-content">
-                    <h3 className="product-content-title">Hộp rượu nam châm</h3>
+                    <h3 className="product-content-title">{item.name}</h3>
                     <ul>
                       <li>
                         <FaRegEye />
@@ -69,123 +108,11 @@ const ProductTypePage = () => {
                     </ul>
                   </div>
                 </div>
-              </Link>
-            </div>
-            <div className="col l-2-4">
-              <div className="product-grid">
-                <div className="product-image">
-                  <img src={images.product} alt="" className="image" />
-                  <ul className="product-links">
-                    <li className="product-link">
-                      <BsHandbag />
-                    </li>
-                    <li className="product-link">
-                      <CiSearch />
-                    </li>
-                  </ul>
-                </div>
-                <div className="product-content">
-                  <h3 className="product-content-title">Hộp rượu nam châm</h3>
-                  <ul>
-                    <li>
-                      <FaRegEye />
-                      18.000
-                    </li>
-                    <li>
-                      <CiHeart />
-                      18.000
-                    </li>
-                  </ul>
-                </div>
               </div>
-            </div>
-            <div className="col l-2-4">
-              <div className="product-grid">
-                <div className="product-image">
-                  <img src={images.product} alt="" className="image" />
-                  <ul className="product-links">
-                    <li className="product-link">
-                      <BsHandbag />
-                    </li>
-                    <li className="product-link">
-                      <CiSearch />
-                    </li>
-                  </ul>
-                </div>
-                <div className="product-content">
-                  <h3 className="product-content-title">Hộp rượu nam châm</h3>
-                  <ul>
-                    <li>
-                      <FaRegEye />
-                      18.000
-                    </li>
-                    <li>
-                      <CiHeart />
-                      18.000
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="col l-2-4">
-              <div className="product-grid">
-                <div className="product-image">
-                  <img src={images.product} alt="" className="image" />
-                  <ul className="product-links">
-                    <li className="product-link">
-                      <BsHandbag />
-                    </li>
-                    <li className="product-link">
-                      <CiSearch />
-                    </li>
-                  </ul>
-                </div>
-                <div className="product-content">
-                  <h3 className="product-content-title">Hộp rượu nam châm</h3>
-                  <ul>
-                    <li>
-                      <FaRegEye />
-                      18.000
-                    </li>
-                    <li>
-                      <CiHeart />
-                      18.000
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="col l-2-4">
-              <div className="product-grid">
-                <div className="product-image">
-                  <img src={images.product} alt="" className="image" />
-                  <ul className="product-links">
-                    <li className="product-link">
-                      <BsHandbag />
-                    </li>
-                    <li className="product-link">
-                      <CiSearch />
-                    </li>
-                  </ul>
-                </div>
-                <div className="product-content">
-                  <h3 className="product-content-title">Hộp rượu nam châm</h3>
-                  <ul>
-                    <li>
-                      <FaRegEye />
-                      18.000
-                    </li>
-                    <li>
-                      <CiHeart />
-                      18.000
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
           <div className="row product_paginate">
-            <Pagination defaultCurrent={1} total={100} style={{ textAlign: 'center', marginTop: '30px' }} />
+            <Pagination defaultCurrent={paginate.page + 1} total={paginate?.total} onChange={onChange} style={{ textAlign: 'center', marginTop: '30px' }} />
           </div>
         </div>
       </div>

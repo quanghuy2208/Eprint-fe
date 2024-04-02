@@ -1,19 +1,19 @@
 import axios from 'axios';
 import { axiosJWT } from './UserService';
 
-export const getAllProduct = async (search, limit) => {
+export const getAllProduct = async (search, limit, typeProduct) => {
   let res = {};
-  if (search?.length > 0) {
-    res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all?filter=name&filter=${search}&limit=${limit}`);
+  if (search || typeProduct) {
+    res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all?name=${search}&typeProduct=${typeProduct}&limit=${limit}`);
   } else {
     res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all?limit=${limit}`);
   }
   return res.data;
 };
 
-export const getProductType = async (type, page, limit) => {
-  if (type) {
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all?filter=type&filter=${type}&limit=${limit}&page=${page}`);
+export const getProductType = async (typeProduct, page, limit) => {
+  if (typeProduct) {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/product/get-all?typeProduct=${typeProduct}&limit=${limit}&page=${page}`);
     return res.data;
   }
 };

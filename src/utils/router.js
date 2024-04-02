@@ -12,8 +12,8 @@ export const ROUTERS = {
     },
     CATEGORY: {
       PATH: '/category',
-      DETAIL: '/category/Product-type/Product-detail',
-      TYPE: '/category/Product-type',
+      DETAIL: '/Product-detail/:id',
+      TYPE: 'Product-type/:type',
     },
     DESIGN: {
       PATH: '/design',
