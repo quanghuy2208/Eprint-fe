@@ -92,6 +92,7 @@ h2 {
   display: flex;
   flex-direction: column;
   background-color: map.get($theme-color, 'main');
+  cursor: pointer;
 }
 .category-item:hover .category-item_image {
   margin: 0 0.5rem;

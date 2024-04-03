@@ -24,7 +24,6 @@ const ProductTypePage = () => {
   });
   const fetchProductType = async (typeSlug, page, limit) => {
     const res = await ProductService.getProductType(typeSlug, page, limit);
-    console.log('🚀 ~ fetchProductType ~ res:', res);
     if (res?.status === 'OK') {
       setProducts(res?.data);
       setPaginate({ ...paginate, total: res?.totalPage });

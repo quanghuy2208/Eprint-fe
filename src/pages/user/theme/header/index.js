@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import './style.scss';
 import { BsHandbag, BsPerson, BsNewspaper, BsBoxSeam } from 'react-icons/bs';
 import { ImCalendar, ImProfile } from 'react-icons/im';
@@ -10,7 +10,7 @@ import { GiTicket, GiPostStamp } from 'react-icons/gi';
 import { RiEmojiStickerLine } from 'react-icons/ri';
 import { FaArrowRight } from 'react-icons/fa';
 import { GoTriangleDown } from 'react-icons/go';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ROUTERS } from '../../../../utils/router';
 import { images } from '../../../../img/index';
 import { Popover } from 'antd';
@@ -19,6 +19,8 @@ import { searchProduct } from '../../../../redux/slices/productSlice';
 import { useDispatch } from 'react-redux';
 
 const Header = () => {
+  const navigate = useNavigate();
+  const menuRef = useRef(null);
   const [user, setUser] = useState(null);
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem('user'));
@@ -26,6 +28,24 @@ const Header = () => {
       setUser(userData);
     }
   }, []);
+  useEffect(() => {
+    const handleClickOutside = event => {
+      // Kiểm tra xem có click bên ngoài phần tử menu không
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        // Nếu không, đặt isShowCategories về false
+        setShowCategories(false);
+      }
+    };
+
+    // Thêm sự kiện click toàn cục
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      // Loại bỏ sự kiện khi component unmount
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   const [isShowCategories, setShowCategories] = useState(false);
   const [search, setSearch] = useState('');
   const [menus] = useState([
@@ -176,11 +196,45 @@ const Header = () => {
     localStorage.removeItem('user');
     setUser(null);
   };
+  const handleNavigatetype = typeSlug => {
+    navigate(`/Product-type/${typeSlug}`, { state: typeSlug });
+  };
   const content = (
     <div>
-      <p style={{ cursor: 'pointer' }}>Hồ sơ</p>
-      {user?.isAdmin && <Link to={'/system/admin'}>Quản lý hệ thống</Link>}
-      <p style={{ cursor: 'pointer' }} onClick={handleLogout}>
+      <p
+        style={{ cursor: 'pointer' }}
+        onMouseEnter={e => {
+          e.target.style.color = '#e00202';
+        }}
+        onMouseLeave={e => {
+          e.target.style.color = 'black';
+        }}>
+        Hồ sơ
+      </p>
+      {user?.isAdmin && (
+        <p
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            navigate('/system/admin');
+          }}
+          onMouseEnter={e => {
+            e.target.style.color = '#e00202';
+          }}
+          onMouseLeave={e => {
+            e.target.style.color = 'black';
+          }}>
+          Quản lý hệ thống
+        </p>
+      )}
+      <p
+        style={{ cursor: 'pointer' }}
+        onClick={handleLogout}
+        onMouseEnter={e => {
+          e.target.style.color = '#e00202';
+        }}
+        onMouseLeave={e => {
+          e.target.style.color = 'black';
+        }}>
         Đăng xuất
       </p>
     </div>
@@ -233,7 +287,7 @@ const Header = () => {
       <div className="grid ">
         <div className="row navbar">
           <div className="col l-3 navbar__item">
-            <div className="header__menu__category" onClick={() => setShowCategories(!isShowCategories)}>
+            <div className="header__menu__category" onClick={() => setShowCategories(!isShowCategories)} ref={menuRef}>
               <GrMenu />
               SẢN PHẨM IN ẤN
             </div>
@@ -242,69 +296,124 @@ const Header = () => {
                 <ul className={isShowCategories ? 'header__menu__category-list' : 'hidden'}>
                   <li className="header__menu__category-item">
                     <ImCalendar />
-                    <Link to={'/Product-type/lich-tet'} className="header__menu__category-link">
+                    <div
+                      className="header__menu__category-link"
+                      onClick={() => {
+                        const typeSlug = 'lich-tet';
+                        handleNavigatetype(typeSlug);
+                      }}>
                       Lịch
-                    </Link>
+                    </div>
                   </li>
                   <li className="header__menu__category-item">
                     <GrCatalog />
-                    <Link to={'/Product-type/catalogue'} className="header__menu__category-link">
+                    <div
+                      className="header__menu__category-link"
+                      onClick={() => {
+                        const typeSlug = 'catalogue';
+                        handleNavigatetype(typeSlug);
+                      }}>
                       Catalogue
-                    </Link>
+                    </div>
                   </li>
                   <li className="header__menu__category-item">
                     <ImProfile />
-                    <Link to={'/Product-type/profile'} className="header__menu__category-link">
+                    <div
+                      className="header__menu__category-link"
+                      onClick={() => {
+                        const typeSlug = 'profile';
+                        handleNavigatetype(typeSlug);
+                      }}>
                       Profile
-                    </Link>
+                    </div>
                   </li>
                   <li className="header__menu__category-item">
                     <BsNewspaper />
-                    <Link to={'/Product-type/brochure'} className="header__menu__category-link">
+                    <div
+                      className="header__menu__category-link"
+                      onClick={() => {
+                        const typeSlug = 'brochure';
+                        handleNavigatetype(typeSlug);
+                      }}>
                       Brochure/Tờ gấp
-                    </Link>
+                    </div>
                   </li>
                   <li className="header__menu__category-item">
                     <BsBoxSeam />
-                    <Link to={'/Product-type/hop'} className="header__menu__category-link">
+                    <div
+                      className="header__menu__category-link"
+                      onClick={() => {
+                        const typeSlug = 'hop';
+                        handleNavigatetype(typeSlug);
+                      }}>
                       Hộp
-                    </Link>
+                    </div>
                   </li>
                   <li className="header__menu__category-item">
                     <MdAssistantPhoto />
-                    <Link to={'/Product-type/standee'} className="header__menu__category-link">
+                    <div
+                      className="header__menu__category-link"
+                      onClick={() => {
+                        const typeSlug = 'standee';
+                        handleNavigatetype(typeSlug);
+                      }}>
                       Standee
-                    </Link>
+                    </div>
                   </li>
                   <li className="header__menu__category-item">
                     <PiSelectionBackgroundBold />
-                    <Link to={'/Product-type/backdrop'} className="header__menu__category-link">
+                    <div
+                      className="header__menu__category-link"
+                      onClick={() => {
+                        const typeSlug = 'backdrop';
+                        handleNavigatetype(typeSlug);
+                      }}>
                       Backdrop
-                    </Link>
+                    </div>
                   </li>
                   <li className="header__menu__category-item">
                     <FaRegPaperPlane />
-                    <Link to={'/Product-type/to-roi'} className="header__menu__category-link">
+                    <div
+                      className="header__menu__category-link"
+                      onClick={() => {
+                        const typeSlug = 'to-roi';
+                        handleNavigatetype(typeSlug);
+                      }}>
                       Tờ rơi
-                    </Link>
+                    </div>
                   </li>
                   <li className="header__menu__category-item">
                     <GiTicket />
-                    <Link to={'/Product-type/voucher'} className="header__menu__category-link">
+                    <div
+                      className="header__menu__category-link"
+                      onClick={() => {
+                        const typeSlug = 'voucher';
+                        handleNavigatetype(typeSlug);
+                      }}>
                       Voucher
-                    </Link>
+                    </div>
                   </li>
                   <li className="header__menu__category-item">
                     <RiEmojiStickerLine />
-                    <Link to={'/Product-type/sticker'} className="header__menu__category-link">
+                    <div
+                      className="header__menu__category-link"
+                      onClick={() => {
+                        const typeSlug = 'sticker';
+                        handleNavigatetype(typeSlug);
+                      }}>
                       Sticker
-                    </Link>
+                    </div>
                   </li>
                   <li className="header__menu__category-item">
                     <GiPostStamp />
-                    <Link to={'/Product-type/tem-nhan'} className="header__menu__category-link">
+                    <div
+                      className="header__menu__category-link"
+                      onClick={() => {
+                        const typeSlug = 'tem-nhan';
+                        handleNavigatetype(typeSlug);
+                      }}>
                       Tem nhãn
-                    </Link>
+                    </div>
                   </li>
                   <li className="header__menu__category-item">
                     <Link to={'/category'} className="header__menu__category-all">

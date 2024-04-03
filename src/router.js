@@ -15,6 +15,8 @@ import { ROUTERS } from './utils/router';
 import { Routes, Route } from 'react-router-dom';
 import AdminPage from './pages/admin/adminPage/index.js';
 import React, { useEffect, useState } from 'react';
+import NewsPage from './pages/user/newsPage/index.js';
+import NewsDetailPage from './pages/user/newsDetailPage/index.js';
 const RenderUserRouter = () => {
   const [user, setUser] = useState(null);
   useEffect(() => {
@@ -73,6 +75,14 @@ const RenderUserRouter = () => {
     {
       path: ROUTERS.USER.ORDER,
       component: <OrderPage />,
+    },
+    {
+      path: ROUTERS.USER.NEWS.PATH,
+      component: <NewsPage />,
+    },
+    {
+      path: ROUTERS.USER.NEWS.DETAIL,
+      component: <NewsDetailPage />,
     },
     {
       path: ROUTERS.ADMIN.PATH,

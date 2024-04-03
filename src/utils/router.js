@@ -2,7 +2,7 @@ export const ROUTERS = {
   USER: {
     LOGIN: '/login',
     HOME: '/',
-    PROFILE: '/Thong-tin-ca-nhan',
+    PROFILE: '/thong-tin-ca-nhan',
     ABOUT: {
       PATH: '/About-us',
       RECRUIT: {
@@ -14,6 +14,10 @@ export const ROUTERS = {
       PATH: '/category',
       DETAIL: '/Product-detail/:id',
       TYPE: 'Product-type/:type',
+    },
+    NEWS: {
+      PATH: '/news',
+      DETAIL: '/News-detail/:id',
     },
     DESIGN: {
       PATH: '/design',
