@@ -19,6 +19,11 @@ const OrderPage = () => {
   const [phone, setPhone] = useState();
   const [address, setAddress] = useState();
   const [typeProducts, setTypeProducts] = useState([]);
+  const validatePhoneNumber = phoneNumber => {
+    var regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+    return regex.test(phoneNumber);
+  };
+
   const handleOnClick = () => {
     setIsActive1(!isActive1);
     setIsActive2(!isActive2);
@@ -51,6 +56,11 @@ const OrderPage = () => {
         phone: phone,
         address: address,
       };
+      if (!validatePhoneNumber(phone)) {
+        alert('Số điện thoại không hợp lệ!');
+      } else {
+        setPhone(phone);
+      }
       const res = await axios.post(`${process.env.REACT_APP_API_URL}/ordercustom/create`, dataOrder);
       if (res.data.status === 'OK') {
         alert('Bạn đã đặt hàng thành công');
@@ -1316,7 +1326,7 @@ const OrderPage = () => {
                 <label htmlFor="">Địa chỉ email</label>
               </div>
               <div className="input-group">
-                <input type="number" required value={phone} onChange={e => setPhone(e.target.value)} />
+                <input type="text" required value={phone} onChange={e => setPhone(e.target.value)} />
                 <label htmlFor=""> Số điện thoại</label>
               </div>
               <div className="input-group">
