@@ -11,7 +11,10 @@ import axios from 'axios';
 import ModalComponent from '../ModalComponent/index.js';
 import { generateSlug } from '../../utils/index.js';
 import { axiosJWT } from '../../services/UserService.js';
+import { Editor } from '@tinymce/tinymce-react';
 const AdminBlog = () => {
+  const editorRef = useRef(null);
+  const editorUpdateRef = useRef();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowSelected, setRowSelected] = useState('');
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
@@ -40,7 +43,7 @@ const AdminBlog = () => {
         title: stateBlog.title,
         typeName: stateBlog.typeName === 'add_type' ? stateBlog.newType : stateBlog.typeName,
         author: stateBlog.author,
-        content: stateBlog.content,
+        content: editorRef.current.getContent(),
         image: stateBlog.image,
       };
       const typeSlug = generateSlug(dataBlog.typeName);
@@ -80,7 +83,7 @@ const AdminBlog = () => {
         title: stateBlogDetails.title,
         typeName: stateBlogDetails.typeName,
         author: stateBlogDetails.author,
-        content: stateBlogDetails.content,
+        content: editorUpdateRef.current.getContent(),
         image: stateBlogDetails.image,
       });
 
@@ -283,17 +286,17 @@ const AdminBlog = () => {
   });
   const columns = [
     {
-      title: 'Title',
+      title: 'Tiêu đề bài viết',
       dataIndex: 'title',
       sorter: (a, b) => a.name.length - b.name.length,
       ...getColumnSearchProps('title'),
     },
     {
-      title: 'Author',
+      title: 'Tác giả',
       dataIndex: 'author',
     },
     {
-      title: 'Type',
+      title: 'Loại bài viết',
       dataIndex: 'typeName',
     },
     {
@@ -340,7 +343,7 @@ const AdminBlog = () => {
           autoComplete="on"
           form={form}>
           <Form.Item
-            label="Title"
+            label="Tiêu đề bài viết"
             name="title"
             rules={[
               {
@@ -352,7 +355,7 @@ const AdminBlog = () => {
           </Form.Item>
 
           <Form.Item
-            label="Type"
+            label="Loại bài viết"
             name="typeName"
             rules={[
               {
@@ -368,7 +371,7 @@ const AdminBlog = () => {
             </Form.Item>
           )}
           <Form.Item
-            label="Author"
+            label="Tác giả"
             name="author"
             rules={[
               {
@@ -378,19 +381,23 @@ const AdminBlog = () => {
             ]}>
             <InputComponent value={stateBlog.author} onChange={handleOnchange} name="author" />
           </Form.Item>
+          <Editor
+            apiKey="7szssbtzvq18wgj85d0dpl6dl3ygh2tn0vuutb5olmlys1m5"
+            onInit={(evt, editor) => (editorRef.current = editor)}
+            initialValue="Hãy xóa và nhập nội dung tin tức vào đây..."
+            init={{
+              selector: 'textarea',
+              images_file_types: 'jpeg,jpg,jpe,jfi,jif,jfif,png,gif,bmp,webp',
+              automatic_uploads: true,
+              height: 500,
+              menubar: true,
+              plugins: ['a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export', 'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks', 'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'],
+              toolbar: 'undo redo | casechange blocks | bold italic backcolor | ' + 'alignleft aligncenter alignright alignjustify | ' + 'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help',
+              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+            }}
+          />
           <Form.Item
-            label="Content"
-            name="content"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your blog content!',
-              },
-            ]}>
-            <InputComponent value={stateBlog.content} onChange={handleOnchange} name="content" />
-          </Form.Item>
-          <Form.Item
-            label="Image"
+            label="Ảnh minh họa"
             name="image"
             rules={[
               {
@@ -421,7 +428,7 @@ const AdminBlog = () => {
               span: 16,
             }}>
             <Button type="primary" htmlType="submit" onClick={createBlog}>
-              Submit
+              Đăng
             </Button>
           </Form.Item>
         </Form>
@@ -443,7 +450,7 @@ const AdminBlog = () => {
           autoComplete="on"
           form={form}>
           <Form.Item
-            label="Title"
+            label="Tiêu đề bài viết"
             name="title"
             rules={[
               {
@@ -455,7 +462,7 @@ const AdminBlog = () => {
           </Form.Item>
 
           <Form.Item
-            label="Type"
+            label="Loại bài viết"
             name="typeName"
             rules={[
               {
@@ -466,7 +473,7 @@ const AdminBlog = () => {
             <InputComponent value={stateBlogDetails['typeName']} onChange={handleOnchangeDetails} name="typeName" />
           </Form.Item>
           <Form.Item
-            label="Author"
+            label="Tác giả"
             name="author"
             rules={[
               {
@@ -476,19 +483,23 @@ const AdminBlog = () => {
             ]}>
             <InputComponent value={stateBlogDetails.author} onChange={handleOnchangeDetails} name="author" />
           </Form.Item>
+          <Editor
+            apiKey="7szssbtzvq18wgj85d0dpl6dl3ygh2tn0vuutb5olmlys1m5"
+            onInit={(evt, editor) => (editorUpdateRef.current = editor)}
+            initialValue="Hãy xóa và nhập nội dung tin tức vào đây..."
+            init={{
+              selector: 'textarea',
+              images_file_types: 'jpeg,jpg,jpe,jfi,jif,jfif,png,gif,bmp,webp',
+              automatic_uploads: true,
+              height: 500,
+              menubar: true,
+              plugins: ['a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export', 'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks', 'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'],
+              toolbar: 'undo redo | casechange blocks | bold italic backcolor | ' + 'alignleft aligncenter alignright alignjustify | ' + 'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help',
+              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+            }}
+          />
           <Form.Item
-            label="Content"
-            name="content"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your blog content!',
-              },
-            ]}>
-            <InputComponent value={stateBlogDetails.content} onChange={handleOnchangeDetails} name="content" />
-          </Form.Item>
-          <Form.Item
-            label="Image"
+            label="Ảnh minh họa"
             name="image"
             rules={[
               {
@@ -524,7 +535,7 @@ const AdminBlog = () => {
           </Form.Item>
         </Form>
       </DrawerComponent>
-      <ModalComponent title="Xóa sản phẩm" open={isModalOpenDelete} onCancel={handleCancelDelete} onOk={onDelete}>
+      <ModalComponent title="Xóa bài viết" open={isModalOpenDelete} onCancel={handleCancelDelete} onOk={onDelete}>
         <div>Bạn có chắc chắn muốn xóa bài viết này không ?</div>
       </ModalComponent>
     </>

@@ -59,7 +59,9 @@ const DetailPage = () => {
   };
   useEffect(() => {
     getDetailsProduct(id);
-  }, []);
+    const elementProdDetail = document.querySelector('.product-detail');
+    if (elementProdDetail) elementProdDetail.innerHTML = detailProduct.description;
+  }, [detailProduct]);
   return (
     <>
       <div className="grid product-detail_background">
@@ -128,7 +130,7 @@ const DetailPage = () => {
                     <h1>Chi tiết sản phẩm</h1>
                   </div>
                   <h2>Mô tả {detailProduct.name}</h2>
-                  <p>
+                  {/* <p>
                     Đứng trước sự phát triển mạnh mẽ và chóng mặt của các thiết bị xem thời gian hiện đại, lịch bloc truyền thống vẫn luôn nhận được sự yêu thích và ưu tiên lựa chọn làm quà biếu tặng ngày tết của người tiêu dùng. Nếu như bạn đang tìm sản phẩm cho doanh nghiệp của mình, hãy tham khảo ngay lịch bloc siêu đại Cây thuốc sức khỏe LB-AH23-11 mà Printgo sẽ bật mí ngay bài viết dưới đây.
                   </p>
                   <span>Quy cách in ấn và gia công lịch bloc</span>
@@ -175,7 +177,9 @@ const DetailPage = () => {
                       </tr>
                     </tbody>
                   </table>
-                  <span>Chi tiết chất liệu và gia công lịch bloc: </span>
+                  <span>Chi tiết chất liệu và gia công lịch bloc: </span> */}
+                  <div className="product-detail"></div>
+                  {/* {detailProduct.description.innerHTML} */}
 
                   <div className="grid wide wide-product-detail_slider">
                     <Carousel responsive={responsive} className="product-detail_slider">

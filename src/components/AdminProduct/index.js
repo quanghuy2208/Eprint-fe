@@ -11,8 +11,11 @@ import axios from 'axios';
 import ModalComponent from '../ModalComponent/index.js';
 import { axiosJWT } from '../../services/UserService.js';
 import { generateSlug } from '../../utils/index.js';
+import { Editor } from '@tinymce/tinymce-react';
 
 const AdminProduct = () => {
+  const editorRef = useRef(null);
+  const editorUpdateRef = useRef();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowSelected, setRowSelected] = useState('');
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
@@ -42,7 +45,7 @@ const AdminProduct = () => {
         name: stateProduct.name,
         typeName: stateProduct.typeName === 'add_type' ? stateProduct.newType : stateProduct.typeName,
         price: stateProduct.price,
-        description: stateProduct.description,
+        description: editorRef.current.getContent(),
         image: stateProduct.image,
       };
       const typeSlug = generateSlug(dataProduct.typeName);
@@ -69,7 +72,7 @@ const AdminProduct = () => {
         name: stateProductDetails.name,
         typeName: stateProductDetails.typeName,
         price: stateProductDetails.price,
-        description: stateProductDetails.description,
+        description: editorUpdateRef.current.getContent(),
         image: stateProductDetails.image,
       });
 
@@ -286,22 +289,22 @@ const AdminProduct = () => {
   });
   const columns = [
     {
-      title: 'Name',
+      title: 'Tên sản phẩm',
       dataIndex: 'name',
       sorter: (a, b) => a.name.length - b.name.length,
       ...getColumnSearchProps('name'),
     },
     {
-      title: 'Price',
+      title: 'Giá sản phẩm',
       dataIndex: 'price',
       sorter: (a, b) => a.price - b.price,
     },
     {
-      title: 'Type',
+      title: 'Loại sản phẩm',
       dataIndex: 'typeName',
     },
     {
-      title: 'Action',
+      title: 'Sửa/Xóa',
       dataIndex: 'action',
       render: renderAction,
     },
@@ -344,7 +347,7 @@ const AdminProduct = () => {
           autoComplete="on"
           form={form}>
           <Form.Item
-            label="Name"
+            label="Tên sản phẩm"
             name="name"
             rules={[
               {
@@ -356,7 +359,7 @@ const AdminProduct = () => {
           </Form.Item>
 
           <Form.Item
-            label="Type"
+            label="Loại sản phẩm"
             name="typeName"
             rules={[
               {
@@ -372,7 +375,7 @@ const AdminProduct = () => {
             </Form.Item>
           )}
           <Form.Item
-            label="Price"
+            label="Giá sản phẩm"
             name="price"
             rules={[
               {
@@ -382,19 +385,23 @@ const AdminProduct = () => {
             ]}>
             <InputComponent value={stateProduct.price} onChange={handleOnchange} name="price" />
           </Form.Item>
+          <Editor
+            apiKey="7szssbtzvq18wgj85d0dpl6dl3ygh2tn0vuutb5olmlys1m5"
+            onInit={(evt, editor) => (editorRef.current = editor)}
+            initialValue="Hãy xóa và nhập nội dung tin tức vào đây..."
+            init={{
+              selector: 'textarea',
+              images_file_types: 'jpeg,jpg,jpe,jfi,jif,jfif,png,gif,bmp,webp',
+              automatic_uploads: true,
+              height: 500,
+              menubar: true,
+              plugins: ['a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export', 'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks', 'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'],
+              toolbar: 'undo redo | casechange blocks | bold italic backcolor | ' + 'alignleft aligncenter alignright alignjustify | ' + 'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help',
+              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+            }}
+          />
           <Form.Item
-            label="Description"
-            name="description"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your product pescription!',
-              },
-            ]}>
-            <InputComponent value={stateProduct.description} onChange={handleOnchange} name="description" />
-          </Form.Item>
-          <Form.Item
-            label="Image"
+            label="Hình ảnh"
             name="image"
             rules={[
               {
@@ -403,7 +410,7 @@ const AdminProduct = () => {
               },
             ]}>
             <WrapperUploadFile onChange={handleOnchangeAvatar} maxCount={1}>
-              <Button>Select File</Button>
+              <Button>Chọn file</Button>
               {stateProduct?.image && (
                 <img
                   src={stateProduct?.image}
@@ -447,7 +454,7 @@ const AdminProduct = () => {
           autoComplete="on"
           form={form}>
           <Form.Item
-            label="Name"
+            label="Tên sản phẩm"
             name="name"
             rules={[
               {
@@ -459,7 +466,7 @@ const AdminProduct = () => {
           </Form.Item>
 
           <Form.Item
-            label="Type"
+            label="Loại sản phẩm"
             name="typeName"
             rules={[
               {
@@ -470,7 +477,7 @@ const AdminProduct = () => {
             <InputComponent value={stateProductDetails['typeName']} onChange={handleOnchangeDetails} name="typeName" />
           </Form.Item>
           <Form.Item
-            label="Price"
+            label="Giá sản phẩm"
             name="price"
             rules={[
               {
@@ -480,19 +487,23 @@ const AdminProduct = () => {
             ]}>
             <InputComponent value={stateProductDetails.price} onChange={handleOnchangeDetails} name="price" />
           </Form.Item>
+          <Editor
+            apiKey="7szssbtzvq18wgj85d0dpl6dl3ygh2tn0vuutb5olmlys1m5"
+            onInit={(evt, editor) => (editorUpdateRef.current = editor)}
+            initialValue={stateProductDetails['description']}
+            init={{
+              selector: 'textarea',
+              images_file_types: 'jpeg,jpg,jpe,jfi,jif,jfif,png,gif,bmp,webp',
+              automatic_uploads: true,
+              height: 500,
+              menubar: true,
+              plugins: ['a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export', 'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks', 'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'],
+              toolbar: 'undo redo | casechange blocks | bold italic backcolor | ' + 'alignleft aligncenter alignright alignjustify | ' + 'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help',
+              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+            }}
+          />
           <Form.Item
-            label="Description"
-            name="description"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your product pescription!',
-              },
-            ]}>
-            <InputComponent value={stateProductDetails.description} onChange={handleOnchangeDetails} name="description" />
-          </Form.Item>
-          <Form.Item
-            label="Image"
+            label="Hình ảnh"
             name="image"
             rules={[
               {

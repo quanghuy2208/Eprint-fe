@@ -1,9 +1,10 @@
 import { Menu } from 'antd';
-import { SnippetsOutlined, ProductOutlined, UserOutlined } from '@ant-design/icons';
+import { SnippetsOutlined, ProductOutlined, UserOutlined, PayCircleOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import AdminUser from '../../../components/AdminUser/index';
 import AdminProduct from '../../../components/AdminProduct/index';
 import AdminBlog from '../../../components/AdminBlog/index';
+import AdminOrder from '../../../components/AdminOrder';
 
 const AdminPage = () => {
   function getItem(label, key, icon, children, type) {
@@ -15,7 +16,7 @@ const AdminPage = () => {
       type,
     };
   }
-  const items = [getItem('Người dùng', 'users', <UserOutlined />), getItem('Sản phẩm', 'products', <ProductOutlined />), getItem('Bài viết', 'blogs', <SnippetsOutlined />)];
+  const items = [getItem('Người dùng', 'users', <UserOutlined />), getItem('Sản phẩm', 'products', <ProductOutlined />), getItem('Bài viết', 'blogs', <SnippetsOutlined />), getItem('Đơn hàng', 'orders', <PayCircleOutlined />)];
   const [keySelected, setKeySelected] = useState();
   const handleOnCLick = ({ key }) => {
     setKeySelected(key);
@@ -28,6 +29,8 @@ const AdminPage = () => {
         return <AdminProduct />;
       case 'blogs':
         return <AdminBlog />;
+      case 'orders':
+        return <AdminOrder />;
       default:
         return <></>;
     }

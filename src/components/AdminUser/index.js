@@ -206,7 +206,7 @@ const AdminUser = () => {
   };
   const columns = [
     {
-      title: 'Name',
+      title: 'Tên người dùng',
       dataIndex: 'name',
       render: text => <a>{text}</a>,
     },
@@ -215,7 +215,7 @@ const AdminUser = () => {
       dataIndex: 'email',
     },
     {
-      title: 'Password',
+      title: 'Mật khẩu',
       dataIndex: 'password',
     },
     {
@@ -351,7 +351,7 @@ const AdminUser = () => {
           autoComplete="on"
           form={form}>
           <Form.Item
-            label="Name"
+            label="Tên người dùng"
             name="name"
             rules={[
               {
