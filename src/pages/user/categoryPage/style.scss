@@ -1,6 +1,5 @@
 @use 'sass:map';
 @import '../../../style/pages/all';
-// @import 'C:\Users\ASUS\OneDrive\Desktop\eprints_web\eprint_frontend-v1\node_modules\animate.css';
 
 .category-list {
   background-image: url('../../../img/product-background.png');
@@ -9,16 +8,21 @@
   .category-content {
     display: flex;
     flex-direction: column;
-    gap: 86px;
+    gap: 20px;
     padding: 100px 0px;
     .row {
       .col.l-2-4.category-display {
         display: flex;
         justify-content: center;
+        padding-left: 10px;
+        padding-right: 10px;
+        height: 25vh;
         .category-item {
           cursor: pointer;
           color: black;
           box-shadow: none;
+          height: auto;
+          width: -webkit-fill-available;
           &:hover {
             box-shadow: 3px 3px 7px 0px #00000040;
           }
