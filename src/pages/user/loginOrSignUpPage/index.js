@@ -1,10 +1,6 @@
 import React, { useRef, useState } from 'react';
 import './style.scss';
 import axios from 'axios';
-// import { jwtDecode } from 'jwt-decode';
-import { updateUser } from '../../../services/UserService';
-import * as UserService from '../../../services/UserService';
-// import { useDispatch, useSelector } from 'react-redux';
 
 const LoginPage = () => {
   const [userName, setUserName] = useState();

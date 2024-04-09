@@ -17,6 +17,7 @@ import AdminPage from './pages/admin/adminPage/index.js';
 import React, { useEffect, useState } from 'react';
 import NewsPage from './pages/user/newsPage/index.js';
 import NewsDetailPage from './pages/user/newsDetailPage/index.js';
+import CollectionPage from './pages/user/collectionPage/index.js';
 const RenderUserRouter = () => {
   const [user, setUser] = useState(null);
   useEffect(() => {
@@ -67,6 +68,10 @@ const RenderUserRouter = () => {
     {
       path: ROUTERS.USER.DESIGN.LOGO,
       component: <LogoPage />,
+    },
+    {
+      path: ROUTERS.USER.COLLECTION,
+      component: <CollectionPage />,
     },
     {
       path: ROUTERS.USER.POLICY,

@@ -1,5 +1,5 @@
 import { Button, Form } from 'antd';
-import { UserAddOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import './style.js';
 import TableComponent from '../TableComponent';
 import InputComponent from '../InputComponent';
@@ -27,26 +27,6 @@ const AdminUser = () => {
   const [stateUserDetails, setStateUserDetails] = useState(inittial());
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
-
-  const createUser = async () => {
-    try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/user/sign-up`, {
-        name: stateUser.name,
-        email: stateUser.email,
-        password: stateUser.password,
-        image: stateUser.image,
-      });
-
-      if (res.data.status === 'OK') {
-        handleCancel();
-        fetchData();
-      } else {
-        alert(res.data.message);
-      }
-    } catch (error) {
-      console.error('Error occurred while signing in:', error);
-    }
-  };
 
   const onUpdate = () => {
     updateUser();
@@ -141,16 +121,6 @@ const AdminUser = () => {
       </div>
     );
   };
-  const handleCancel = () => {
-    setStateUser({
-      name: '',
-      email: '',
-      password: '',
-      avatar: '',
-    });
-    setIsModalOpen(false);
-    form.resetFields();
-  };
   const handleCancelDelete = () => {
     setIsModalOpenDelete(false);
   };
@@ -166,26 +136,10 @@ const AdminUser = () => {
     form.resetFields();
   };
 
-  const handleOnchange = e => {
-    setStateUser({
-      ...stateUser,
-      [e.target.name]: e.target.value,
-    });
-  };
   const handleOnchangeDetails = e => {
     setStateUserDetails({
       ...stateUserDetails,
       [e.target.name]: e.target.value,
-    });
-  };
-  const handleOnchangeAvatar = async ({ fileList }) => {
-    const file = fileList[0];
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setStateUser({
-      ...stateUser,
-      avatar: file.preview,
     });
   };
   const handleOnchangeAvatarDetails = async ({ fileList }) => {
@@ -197,12 +151,6 @@ const AdminUser = () => {
       ...stateUserDetails,
       avatar: file.preview,
     });
-  };
-  const handleDetailsUser = () => {
-    if (rowSelected) {
-      fetchGetDetailsUser();
-    }
-    setIsOpenDrawer(true);
   };
   const columns = [
     {
@@ -227,11 +175,6 @@ const AdminUser = () => {
   return (
     <>
       <h1>Quản lý người dùng</h1>
-      {/* <div style={{ marginTop: '20px' }}>
-        <Button style={{ height: '150px', width: '150px', borderRadius: '6px', borderStyle: 'dashed' }} onClick={showModal}>
-          <UserAddOutlined style={{ fontSize: '60px' }} />
-        </Button>
-      </div> */}
       <div style={{ marginTop: '20px' }}>
         <TableComponent
           columns={columns}
@@ -245,94 +188,6 @@ const AdminUser = () => {
           }}
         />
       </div>
-      {/* <ModalComponent title="Tạo người dùng" open={isModalOpen} onCancel={handleCancel} footer={null}>
-        <Form
-          name="createUserForm"
-          labelCol={{
-            span: 6,
-          }}
-          wrapperCol={{
-            span: 18,
-          }}
-          style={{
-            width: '100%',
-            flexDirection: 'column',
-            alignItems: 'stretch',
-          }}
-          onFinish={onFinish}
-          autoComplete="on"
-          form={form}>
-          <Form.Item
-            label="Name"
-            name="name"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your User name!',
-              },
-            ]}>
-            <InputComponent value={stateUser['name']} onChange={handleOnchange} name="name" />
-          </Form.Item>
-
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your User type!',
-              },
-            ]}>
-            <InputComponent value={stateUser.email} onChange={handleOnchange} name="email" />
-          </Form.Item>
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your User password!',
-              },
-            ]}>
-            <InputComponent value={stateUser.password} onChange={handleOnchange} name="password" />
-          </Form.Item>
-          <Form.Item
-            label="Image"
-            name="image"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your User Image!',
-              },
-            ]}>
-            <WrapperUploadFile onChange={handleOnchangeAvatar} maxCount={1}>
-              <Button>Select File</Button>
-              {stateUser?.image && (
-                <img
-                  src={stateUser?.image}
-                  style={{
-                    height: '60px',
-                    width: '60px',
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                    marginLeft: '10px',
-                  }}
-                  alt="avatar"
-                />
-              )}
-            </WrapperUploadFile>
-          </Form.Item>
-          <Form.Item
-            wrapperCol={{
-              offset: 20,
-              span: 16,
-            }}>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
-          </Form.Item>
-        </Form>
-      </ModalComponent> */}
       <DrawerComponent title="Cập nhật thông tin người dùng" isOpen={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} width="90%">
         <Form
           name="updateUserForm"

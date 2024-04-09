@@ -1,10 +1,11 @@
 import { Menu } from 'antd';
-import { SnippetsOutlined, ProductOutlined, UserOutlined, PayCircleOutlined } from '@ant-design/icons';
+import { SnippetsOutlined, ProductOutlined, UserOutlined, PayCircleOutlined, FilePdfOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import AdminUser from '../../../components/AdminUser/index';
 import AdminProduct from '../../../components/AdminProduct/index';
 import AdminBlog from '../../../components/AdminBlog/index';
 import AdminOrder from '../../../components/AdminOrder';
+import AdminCollection from '../../../components/AdminCollection';
 
 const AdminPage = () => {
   function getItem(label, key, icon, children, type) {
@@ -16,7 +17,7 @@ const AdminPage = () => {
       type,
     };
   }
-  const items = [getItem('Người dùng', 'users', <UserOutlined />), getItem('Sản phẩm', 'products', <ProductOutlined />), getItem('Bài viết', 'blogs', <SnippetsOutlined />), getItem('Đơn hàng', 'orders', <PayCircleOutlined />)];
+  const items = [getItem('Người dùng', 'users', <UserOutlined />), getItem('Sản phẩm', 'products', <ProductOutlined />), getItem('Bài viết', 'blogs', <SnippetsOutlined />), getItem('Đơn hàng', 'orders', <PayCircleOutlined />), getItem('Bộ sưu tập', 'collections', <FilePdfOutlined />)];
   const [keySelected, setKeySelected] = useState();
   const handleOnCLick = ({ key }) => {
     setKeySelected(key);
@@ -31,6 +32,8 @@ const AdminPage = () => {
         return <AdminBlog />;
       case 'orders':
         return <AdminOrder />;
+      case 'collections':
+        return <AdminCollection />;
       default:
         return <></>;
     }
