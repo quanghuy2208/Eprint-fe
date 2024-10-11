@@ -1,0 +1,3 @@
+[submodule "Eprint-fe"]
+	path = Eprint-fe
+	url = https://github.com/quanghuy2208/Eprint-fe.git
