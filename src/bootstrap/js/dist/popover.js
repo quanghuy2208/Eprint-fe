@@ -7,7 +7,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('./tooltip.js'), require('./util/index.js')) :
   typeof define === 'function' && define.amd ? define(['./tooltip', './util/index'], factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Popover = factory(global.Tooltip, global.Index));
-})(this, (function (Tooltip, index_js) { 'use strict';
+})(this, (function (Tooltip, index_js) { 
 
   /**
    * --------------------------------------------------------------------------

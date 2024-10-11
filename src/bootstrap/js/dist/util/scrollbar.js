@@ -7,7 +7,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('../dom/manipulator.js'), require('../dom/selector-engine.js'), require('./index.js')) :
   typeof define === 'function' && define.amd ? define(['../dom/manipulator', '../dom/selector-engine', './index'], factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Scrollbar = factory(global.Manipulator, global.SelectorEngine, global.Index));
-})(this, (function (Manipulator, SelectorEngine, index_js) { 'use strict';
+})(this, (function (Manipulator, SelectorEngine, index_js) { 
 
   /**
    * --------------------------------------------------------------------------
