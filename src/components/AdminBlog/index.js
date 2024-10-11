@@ -1,55 +1,63 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form, Select, Space } from 'antd';
-import { DiffOutlined, DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
+import { FolderAddOutlined, DeleteOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
 import TableComponent from '../TableComponent/index';
 import InputComponent from '../InputComponent/index';
 import DrawerComponent from '../DrawerComponent/index';
-import * as BlogService from '../../services/BlogService.js';
+import * as CollectionService from '../../services/CollectionService.js';
 import { getBase64, renderOptions } from '../../utils/router';
 import { WrapperUploadFile } from './style.js';
 import axios from 'axios';
 import ModalComponent from '../ModalComponent/index.js';
 import { generateSlug } from '../../utils/index.js';
 import { axiosJWT } from '../../services/UserService.js';
-import { Editor } from '@tinymce/tinymce-react';
-const AdminBlog = () => {
-  const editorRef = useRef(null);
-  const editorUpdateRef = useRef();
+
+const AdminCollection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowSelected, setRowSelected] = useState('');
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
-  const [typeBlogs, setTypeBlogs] = useState([]);
-  const inittial = () => ({
-    title: '',
-    author: '',
+  const [typeCollections, setTypeCollections] = useState([]);
+  
+  const initial = () => ({
     typeName: '',
-    newType: '',
-    content: '',
-    image: '',
     typeSlug: '',
+    newType: '',
+    fileName: '',
+    fileLink: '',
   });
-  const [stateBlog, setStateBlog] = useState(inittial());
-  const [stateBlogDetails, setStateBlogDetails] = useState(inittial());
+
+  const [stateCollection, setStateCollection] = useState(initial());
+  const [stateCollectionDetails, setStateCollectionDetails] = useState(initial());
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const searchInput = useRef(null);
+
   const showModal = () => {
     setIsModalOpen(true);
   };
-  const createBlog = async () => {
-    try {
-      const dataBlog = {
-        title: stateBlog.title,
-        typeName: stateBlog.typeName === 'add_type' ? stateBlog.newType : stateBlog.typeName,
-        author: stateBlog.author,
-        content: editorRef.current.getContent(),
-        image: stateBlog.image,
-      };
-      const typeSlug = generateSlug(dataBlog.typeName);
-      dataBlog.typeSlug = typeSlug;
 
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/blog/create`, dataBlog);
+  const createCollection = async () => {
+    try {
+      const fileInput = document.getElementById('file-pdf');
+      const file = fileInput.files[0];
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('folder', 'file');
+
+      const dataRes = await axios.post(`${process.env.REACT_APP_API_URL}/upload`, formData);
+      const downloadURL = dataRes.data?.downloadURL;
+
+      const dataCollection = {
+        typeName: stateCollection.typeName === 'add_type' ? stateCollection.newType : stateCollection.typeName,
+        fileName: file.name?.split('.')[0],
+        fileLink: downloadURL,
+      };
+      
+      const typeSlug = generateSlug(dataCollection.typeName);
+      dataCollection.typeSlug = typeSlug;
+
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/collection/create`, dataCollection);
 
       if (res.data.status === 'OK') {
         handleCancel();
@@ -58,12 +66,13 @@ const AdminBlog = () => {
         alert(res.data.message);
       }
     } catch (error) {
-      console.error('Error occurred while signing in:', error);
+      console.error('Error occurred while creating collection:', error);
     }
   };
-  const deleteBlog = async () => {
+
+  const deleteCollection = async () => {
     try {
-      const res = await axiosJWT.delete(`${process.env.REACT_APP_API_URL}/blog/delete/${rowSelected}`, {});
+      const res = await axiosJWT.delete(`${process.env.REACT_APP_API_URL}/collection/delete/${rowSelected}`, {});
       if (res.data.status === 'OK') {
         handleCancelDelete();
         fetchData();
@@ -71,20 +80,19 @@ const AdminBlog = () => {
         alert(res.data.message);
       }
     } catch (error) {
-      console.error('Error occurred while signing in:', error);
+      console.error('Error occurred while deleting collection:', error);
     }
   };
+
   const onDelete = () => {
-    deleteBlog();
+    deleteCollection();
   };
-  const updateBlog = async () => {
+
+  const updateCollection = async () => {
     try {
-      const res = await axios.put(`${process.env.REACT_APP_API_URL}/blog/update/${rowSelected}`, {
-        title: stateBlogDetails.title,
-        typeName: stateBlogDetails.typeName,
-        author: stateBlogDetails.author,
-        content: editorUpdateRef.current.getContent(),
-        image: stateBlogDetails.image,
+      const res = await axios.put(`${process.env.REACT_APP_API_URL}/collection/update/${rowSelected}`, {
+        typeName: stateCollectionDetails.typeName,
+        pdf: stateCollectionDetails.pdf,
       });
 
       if (res.data.status === 'OK') {
@@ -94,54 +102,58 @@ const AdminBlog = () => {
         alert(res.data.message);
       }
     } catch (error) {
-      console.error('Error occurred while signing in:', error);
+      console.error('Error occurred while updating collection:', error);
     }
   };
+
   useEffect(() => {
     fetchData();
-  }, []);
+  }, []); // Chỉ cần gọi fetchData một lần khi component được mount
+
   useEffect(() => {
     if (!isModalOpen) {
-      form.setFieldsValue(stateBlogDetails);
+      form.setFieldsValue(stateCollectionDetails);
     } else {
-      form.setFieldsValue(inittial());
+      form.setFieldsValue(initial());
     }
-  }, [form, stateBlogDetails, isModalOpen]);
+  }, [form, stateCollectionDetails, isModalOpen]);
 
   useEffect(() => {
     if (rowSelected && isOpenDrawer) {
-      fetchGetDetailsBlog(rowSelected);
+      fetchGetDetailsCollection(rowSelected);
     }
-  }, [rowSelected, isOpenDrawer]);
+  }, [rowSelected, isOpenDrawer]); // Đã thêm rowSelected và isOpenDrawer vào dependency array
+
   useEffect(() => {
-    fetchAllTypeBlog();
-  }, []);
+    fetchAllTypeCollection();
+  }, []); // Chỉ cần gọi fetchAllTypeCollection một lần khi component được mount
+
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/blog/get-all`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/collection/get-all`);
       setData(response.data.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
-  const fetchGetDetailsBlog = async () => {
-    const res = await BlogService.getDetailsBlog(rowSelected);
+
+  const fetchGetDetailsCollection = async (rowSelected) => { // Thêm tham số rowSelected vào hàm
+    const res = await CollectionService.getDetailsCollection(rowSelected);
     if (res?.data) {
-      setStateBlogDetails({
-        title: res?.data?.title,
-        typeName: res?.data?.typeName,
-        author: res?.data?.author,
-        content: res?.data?.content,
-        image: res?.data?.image,
+      setStateCollectionDetails({
+        typeName: res.data.typeName,
+        fileName: res.data.fileName,
       });
     }
   };
-  const fetchAllTypeBlog = async () => {
-    const res = await BlogService.getAllTypeBlog();
+
+  const fetchAllTypeCollection = async () => {
+    const res = await CollectionService.getAllTypeCollection();
     if (res?.status === 'OK') {
-      setTypeBlogs(res?.data);
+      setTypeCollections(res.data);
     }
   };
+
   const renderAction = () => {
     return (
       <div>
@@ -160,76 +172,63 @@ const AdminBlog = () => {
       </div>
     );
   };
+
   const handleCancel = () => {
-    setStateBlog({
-      title: '',
-      typeName: '',
-      author: '',
-      content: '',
-      image: '',
-    });
+    setStateCollection(initial()); // Sử dụng hàm initial() để reset
     setIsModalOpen(false);
     form.resetFields();
   };
+
   const handleCancelDelete = () => {
     setIsModalOpenDelete(false);
   };
 
   const handleCloseDrawer = () => {
-    setStateBlogDetails({
-      title: '',
-      typeName: '',
-      author: '',
-      content: '',
-      image: '',
-    });
+    setStateCollectionDetails(initial()); // Sử dụng hàm initial() để reset
     setIsOpenDrawer(false);
     form.resetFields();
   };
+
   const handleOnchange = e => {
-    setStateBlog({
-      ...stateBlog,
+    setStateCollection({
+      ...stateCollection,
       [e.target.name]: e.target.value,
     });
   };
+
   const handleOnchangeDetails = e => {
-    setStateBlogDetails({
-      ...stateBlogDetails,
+    setStateCollectionDetails({
+      ...stateCollectionDetails,
       [e.target.name]: e.target.value,
     });
   };
-  const handleOnchangeAvatar = async ({ fileList }) => {
-    const file = fileList[0];
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setStateBlog({
-      ...stateBlog,
-      image: file.preview,
-    });
-  };
+
   const handleOnchangeAvatarDetails = async ({ fileList }) => {
     const file = fileList[0];
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
-    setStateBlogDetails({
-      ...stateBlogDetails,
-      image: file.preview,
+    setStateCollectionDetails({
+      ...stateCollectionDetails,
+      pdf: file.preview,
     });
   };
+
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
   };
+
   const handleReset = clearFilters => {
     clearFilters();
   };
+
   const handleChangeSelect = value => {
-    setStateBlog({
-      ...stateBlog,
+    setStateCollection({
+      ...stateCollection,
       typeName: value,
     });
   };
+
   const getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div
@@ -284,261 +283,103 @@ const AdminBlog = () => {
       }
     },
   });
+
   const columns = [
     {
-      title: 'Tiêu đề bài viết',
-      dataIndex: 'title',
-      sorter: (a, b) => a.name.length - b.name.length,
-      ...getColumnSearchProps('title'),
-    },
-    {
-      title: 'Tác giả',
-      dataIndex: 'author',
-    },
-    {
-      title: 'Loại bài viết',
+      title: 'Thể loại bộ sưu tập',
       dataIndex: 'typeName',
+      sorter: (a, b) => a.name.length - b.name.length,
+      ...getColumnSearchProps('typeName'),
     },
     {
-      title: 'Action',
-      dataIndex: 'action',
-      render: renderAction,
+      title: 'Tập tin pdf',
+      dataIndex: 'fileName',
+    },
+    {
+      title: 'Hành động',
+      render: (text, record) => renderAction(record),
     },
   ];
+
   return (
     <>
-      <h1>Quản lý bài viết </h1>
-      <div style={{ marginTop: '20px' }}>
-        <Button style={{ height: '150px', width: '150px', borderRadius: '6px', borderStyle: 'dashed' }} onClick={showModal}>
-          <DiffOutlined style={{ fontSize: '60px' }} />
-        </Button>
-      </div>
-      <div style={{ marginTop: '20px' }}>
-        <TableComponent
-          columns={columns}
-          data={data}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: event => {
-                setRowSelected(record._id);
-              },
-            };
-          }}
-        />
-      </div>
-      <ModalComponent title="Đăng bài viết" open={isModalOpen} onCancel={handleCancel} footer={null}>
-        <Form
-          name="createBlogForm"
-          labelCol={{
-            span: 6,
-          }}
-          wrapperCol={{
-            span: 18,
-          }}
-          style={{
-            width: '100%',
-            flexDirection: 'column',
-            alignItems: 'stretch',
-          }}
-          autoComplete="on"
-          form={form}>
-          <Form.Item
-            label="Tiêu đề bài viết"
-            name="title"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your Blog title!',
-              },
-            ]}>
-            <InputComponent value={stateBlog['title']} onChange={handleOnchange} name="title" />
-          </Form.Item>
+      <Button
+        type="primary"
+        onClick={showModal}
+        icon={<FolderAddOutlined />}
+        style={{
+          marginBottom: 16,
+        }}>
+        Thêm mới
+      </Button>
 
-          <Form.Item
-            label="Loại bài viết"
-            name="typeName"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your Blog type!',
-              },
-            ]}>
-            <Select name="typeName" value={stateBlog.typeName} onChange={handleChangeSelect} options={renderOptions(typeBlogs)} />
-          </Form.Item>
-          {stateBlog.typeName === 'add_type' && (
-            <Form.Item label="New type" name="newType" rules={[{ required: true, message: 'Please input your type!' }]}>
-              <InputComponent value={stateBlog.newType} onChange={handleOnchange} name="newType" />
+      <TableComponent dataSource={data} columns={columns} />
+
+      <ModalComponent
+        isOpen={isModalOpen}
+        title="Thêm mới bộ sưu tập"
+        onCancel={handleCancel}
+        onOk={createCollection}
+        okText="Thêm mới"
+        cancelText="Hủy"
+      >
+        <WrapperUploadFile>
+          <Form form={form} layout="vertical">
+            <Form.Item label="Chọn thể loại">
+              <Select defaultValue="add_type" onChange={handleChangeSelect}>
+                <Select.Option value="add_type">Thêm thể loại mới</Select.Option>
+                {typeCollections.length > 0 && renderOptions(typeCollections)}
+              </Select>
             </Form.Item>
-          )}
-          <Form.Item
-            label="Tác giả"
-            name="author"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your blog author!',
-              },
-            ]}>
-            <InputComponent value={stateBlog.author} onChange={handleOnchange} name="author" />
-          </Form.Item>
-          <Editor
-            apiKey="7szssbtzvq18wgj85d0dpl6dl3ygh2tn0vuutb5olmlys1m5"
-            onInit={(evt, editor) => (editorRef.current = editor)}
-            initialValue="Hãy xóa và nhập nội dung tin tức vào đây..."
-            init={{
-              selector: 'textarea',
-              images_file_types: 'jpeg,jpg,jpe,jfi,jif,jfif,png,gif,bmp,webp',
-              automatic_uploads: true,
-              height: 500,
-              menubar: true,
-              plugins: ['a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export', 'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks', 'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'],
-              toolbar: 'undo redo | casechange blocks | bold italic backcolor | ' + 'alignleft aligncenter alignright alignjustify | ' + 'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help',
-              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-            }}
-          />
-          <Form.Item
-            label="Ảnh minh họa"
-            name="image"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your Blog Image!',
-              },
-            ]}>
-            <WrapperUploadFile onChange={handleOnchangeAvatar} maxCount={1}>
-              <Button>Select File</Button>
-              {stateBlog?.image && (
-                <img
-                  src={stateBlog?.image}
-                  style={{
-                    height: '60px',
-                    width: '60px',
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                    marginLeft: '10px',
-                  }}
-                  alt="avatar"
-                />
-              )}
-            </WrapperUploadFile>
-          </Form.Item>
-          <Form.Item
-            wrapperCol={{
-              offset: 20,
-              span: 16,
-            }}>
-            <Button type="primary" htmlType="submit" onClick={createBlog}>
-              Đăng
-            </Button>
-          </Form.Item>
-        </Form>
+            {stateCollection.typeName === 'add_type' && (
+              <Form.Item label="Tên thể loại" name="newType" required>
+                <InputComponent onChange={handleOnchange} name="newType" />
+              </Form.Item>
+            )}
+            <Form.Item label="Chọn tệp PDF" required>
+              <input type="file" id="file-pdf" />
+            </Form.Item>
+          </Form>
+        </WrapperUploadFile>
       </ModalComponent>
-      <DrawerComponent title="Chi tiết bài viết" isOpen={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} width="90%">
-        <Form
-          name="updateBlogForm"
-          labelCol={{
-            span: 2,
-          }}
-          wrapperCol={{
-            span: 22,
-          }}
-          style={{
-            width: '100%',
-            flexDirection: 'column',
-            alignItems: 'stretch',
-          }}
-          autoComplete="on"
-          form={form}>
-          <Form.Item
-            label="Tiêu đề bài viết"
-            name="title"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your blog title!',
-              },
-            ]}>
-            <InputComponent value={stateBlogDetails['title']} onChange={handleOnchangeDetails} name="title" />
-          </Form.Item>
 
-          <Form.Item
-            label="Loại bài viết"
-            name="typeName"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your blog type!',
-              },
-            ]}>
-            <InputComponent value={stateBlogDetails['typeName']} onChange={handleOnchangeDetails} name="typeName" />
-          </Form.Item>
-          <Form.Item
-            label="Tác giả"
-            name="author"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your blog author!',
-              },
-            ]}>
-            <InputComponent value={stateBlogDetails.author} onChange={handleOnchangeDetails} name="author" />
-          </Form.Item>
-          <Editor
-            apiKey="7szssbtzvq18wgj85d0dpl6dl3ygh2tn0vuutb5olmlys1m5"
-            onInit={(evt, editor) => (editorUpdateRef.current = editor)}
-            initialValue="Hãy xóa và nhập nội dung tin tức vào đây..."
-            init={{
-              selector: 'textarea',
-              images_file_types: 'jpeg,jpg,jpe,jfi,jif,jfif,png,gif,bmp,webp',
-              automatic_uploads: true,
-              height: 500,
-              menubar: true,
-              plugins: ['a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export', 'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks', 'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'],
-              toolbar: 'undo redo | casechange blocks | bold italic backcolor | ' + 'alignleft aligncenter alignright alignjustify | ' + 'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help',
-              content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-            }}
-          />
-          <Form.Item
-            label="Ảnh minh họa"
-            name="image"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your Blog Image!',
-              },
-            ]}>
-            <WrapperUploadFile onChange={handleOnchangeAvatarDetails} maxCount={1}>
-              <Button>Select File</Button>
-              {stateBlogDetails?.image && (
-                <img
-                  src={stateBlogDetails?.image}
-                  style={{
-                    height: '60px',
-                    width: '60px',
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                    marginLeft: '10px',
-                  }}
-                  alt="avatar"
-                />
-              )}
-            </WrapperUploadFile>
-          </Form.Item>
-          <Form.Item
-            wrapperCol={{
-              offset: 20,
-              span: 16,
-            }}>
-            <Button type="primary" htmlType="submit" onClick={updateBlog}>
-              Apply
-            </Button>
-          </Form.Item>
-        </Form>
+      <DrawerComponent
+        title="Cập nhật bộ sưu tập"
+        width={720}
+        onClose={handleCloseDrawer}
+        visible={isOpenDrawer}>
+        <WrapperUploadFile>
+          <Form form={form} layout="vertical">
+            <Form.Item label="Tên thể loại" name="typeName" required>
+              <InputComponent onChange={handleOnchangeDetails} name="typeName" />
+            </Form.Item>
+            <Form.Item label="Tập tin PDF">
+              <InputComponent
+                value={stateCollectionDetails.fileName}
+                disabled
+              />
+            </Form.Item>
+            <Form.Item label="Hình ảnh" required>
+              <InputComponent onChange={handleOnchangeAvatarDetails} />
+            </Form.Item>
+          </Form>
+        </WrapperUploadFile>
+        <Button type="primary" onClick={updateCollection}>
+          Cập nhật
+        </Button>
       </DrawerComponent>
-      <ModalComponent title="Xóa bài viết" open={isModalOpenDelete} onCancel={handleCancelDelete} onOk={onDelete}>
-        <div>Bạn có chắc chắn muốn xóa bài viết này không ?</div>
+
+      <ModalComponent
+        isOpen={isModalOpenDelete}
+        title="Xóa bộ sưu tập"
+        onCancel={handleCancelDelete}
+        onOk={onDelete}
+        okText="Xóa"
+        cancelText="Hủy">
+        <p>Bạn có chắc chắn muốn xóa bộ sưu tập này không?</p>
       </ModalComponent>
     </>
   );
 };
-export default AdminBlog;
+
+export default AdminCollection;

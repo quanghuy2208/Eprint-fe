@@ -1,6 +1,6 @@
 {
   "name": "eprint_frontend-v1",
-  "homepage": "https://cungconthanhtai.online",
+  "homepage": "https://6708d40fe633f71201c96303--deft-kitten-703d93.netlify.app/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -11,10 +11,13 @@
     "@testing-library/user-event": "^13.2.1",
     "@tinymce/tinymce-react": "^5.0.0",
     "animate.css": "^4.1.1",
-    "antd": "^5.15.3",
+    "antd": "^5.21.2",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
+    "browserify-zlib": "^0.2.0",
     "jwt-decode": "^4.0.0",
+    "mongodb": "^6.9.0",
+    "mongoose": "^8.7.1",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
     "react-awesome-slider": "^4.1.0",
@@ -32,10 +35,9 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "prebuild": "npx update-browserslist-db@latest",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "lint": "eslint ."
   },
   "eslintConfig": {
     "extends": [
@@ -59,6 +61,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "babel-plugin-module-resolver": "^5.0.0",
     "customize-cra": "^1.0.0",
+    "eslint": "^8.57.1",
     "react-app-rewired": "^2.2.1",
     "sass": "^1.71.1"
   }

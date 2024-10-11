@@ -11,12 +11,14 @@ import axios from 'axios';
 import ModalComponent from '../ModalComponent/index.js';
 import { generateSlug } from '../../utils/index.js';
 import { axiosJWT } from '../../services/UserService.js';
+
 const AdminCollection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rowSelected, setRowSelected] = useState('');
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
   const [typeCollections, setTypeCollections] = useState([]);
+  
   const inittial = () => ({
     typeName: '',
     typeSlug: '',
@@ -24,14 +26,17 @@ const AdminCollection = () => {
     fileName: '',
     fileLink: '',
   });
+
   const [stateCollection, setStateCollection] = useState(inittial());
   const [stateCollectionDetails, setStateCollectionDetails] = useState(inittial());
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const searchInput = useRef(null);
+
   const showModal = () => {
     setIsModalOpen(true);
   };
+
   const createCollection = async () => {
     try {
       const fileInput = document.getElementById('file-pdf');
@@ -39,6 +44,7 @@ const AdminCollection = () => {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('folder', 'file');
+
       const dataRes = await axios.post(`${process.env.REACT_APP_API_URL}/upload`, formData);
       const downloadURL = dataRes.data?.downloadURL;
 
@@ -47,6 +53,7 @@ const AdminCollection = () => {
         fileName: file.name?.split('.')[0],
         fileLink: downloadURL,
       };
+
       const typeSlug = generateSlug(dataCollection.typeName);
       dataCollection.typeSlug = typeSlug;
 
@@ -59,9 +66,10 @@ const AdminCollection = () => {
         alert(res.data.message);
       }
     } catch (error) {
-      console.error('Error occurred while signing in:', error);
+      console.error('Error occurred while creating collection:', error);
     }
   };
+
   const deleteCollection = async () => {
     try {
       const res = await axiosJWT.delete(`${process.env.REACT_APP_API_URL}/collection/delete/${rowSelected}`, {});
@@ -72,12 +80,14 @@ const AdminCollection = () => {
         alert(res.data.message);
       }
     } catch (error) {
-      console.error('Error occurred while signing in:', error);
+      console.error('Error occurred while deleting collection:', error);
     }
   };
+
   const onDelete = () => {
     deleteCollection();
   };
+
   const updateCollection = async () => {
     try {
       const res = await axios.put(`${process.env.REACT_APP_API_URL}/collection/update/${rowSelected}`, {
@@ -92,28 +102,32 @@ const AdminCollection = () => {
         alert(res.data.message);
       }
     } catch (error) {
-      console.error('Error occurred while signing in:', error);
+      console.error('Error occurred while updating collection:', error);
     }
   };
+
   useEffect(() => {
     fetchData();
-  }, []);
+  }, []); // Đây là ổn nếu fetchData không phụ thuộc vào state khác.
+
   useEffect(() => {
     if (!isModalOpen) {
       form.setFieldsValue(stateCollectionDetails);
     } else {
       form.setFieldsValue(inittial());
     }
-  }, [form, stateCollectionDetails, isModalOpen]);
+  }, [form, stateCollectionDetails, isModalOpen]); // Cần kiểm tra xem form có cần cập nhật gì khác không.
 
   useEffect(() => {
     if (rowSelected && isOpenDrawer) {
       fetchGetDetailsCollection(rowSelected);
     }
-  }, [rowSelected, isOpenDrawer]);
+  }, [rowSelected, isOpenDrawer]); // Kiểm tra các dependency có cần thiết không.
+
   useEffect(() => {
     fetchAllTypeCollection();
-  }, []);
+  }, []); // Ổn nếu fetchAllTypeCollection không phụ thuộc vào state khác.
+
   const fetchData = async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/collection/get-all`);
@@ -122,6 +136,7 @@ const AdminCollection = () => {
       console.error('Error fetching data:', error);
     }
   };
+
   const fetchGetDetailsCollection = async () => {
     const res = await CollectionService.getDetailsCollection(rowSelected);
     if (res?.data) {
@@ -131,12 +146,14 @@ const AdminCollection = () => {
       });
     }
   };
+
   const fetchAllTypeCollection = async () => {
     const res = await CollectionService.getAllTypeCollection();
     if (res?.status === 'OK') {
       setTypeCollections(res?.data);
     }
   };
+
   const renderAction = () => {
     return (
       <div>
@@ -155,6 +172,7 @@ const AdminCollection = () => {
       </div>
     );
   };
+
   const handleCancel = () => {
     setStateCollection({
       typeName: '',
@@ -163,6 +181,7 @@ const AdminCollection = () => {
     setIsModalOpen(false);
     form.resetFields();
   };
+
   const handleCancelDelete = () => {
     setIsModalOpenDelete(false);
   };
@@ -175,18 +194,21 @@ const AdminCollection = () => {
     setIsOpenDrawer(false);
     form.resetFields();
   };
+
   const handleOnchange = e => {
     setStateCollection({
       ...stateCollection,
       [e.target.name]: e.target.value,
     });
   };
+
   const handleOnchangeDetails = e => {
     setStateCollectionDetails({
       ...stateCollectionDetails,
       [e.target.name]: e.target.value,
     });
   };
+
   const handleOnchangeAvatarDetails = async ({ fileList }) => {
     const file = fileList[0];
     if (!file.url && !file.preview) {
@@ -197,18 +219,22 @@ const AdminCollection = () => {
       pdf: file.preview,
     });
   };
+
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
   };
+
   const handleReset = clearFilters => {
     clearFilters();
   };
+
   const handleChangeSelect = value => {
     setStateCollection({
       ...stateCollection,
       typeName: value,
     });
   };
+
   const getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div
@@ -263,6 +289,7 @@ const AdminCollection = () => {
       }
     },
   });
+
   const columns = [
     {
       title: 'Thể loại bộ sưu tập',
@@ -276,141 +303,84 @@ const AdminCollection = () => {
     },
     {
       title: 'Action',
-      dataIndex: 'action',
-      render: renderAction,
+      render: (_, record) => (
+        <span>
+          {renderAction()}
+        </span>
+      ),
     },
   ];
-  return (
-    <>
-      <h1>Quản lý bộ sưu tập</h1>
-      <div style={{ marginTop: '20px' }}>
-        <Button style={{ height: '150px', width: '150px', borderRadius: '6px', borderStyle: 'dashed' }} onClick={showModal}>
-          <FolderAddOutlined style={{ fontSize: '60px' }} />
-        </Button>
-      </div>
-      <div style={{ marginTop: '20px' }}>
-        <TableComponent
-          columns={columns}
-          data={data}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: event => {
-                setRowSelected(record._id);
-              },
-            };
-          }}
-        />
-      </div>
-      <ModalComponent title="Đăng bộ sưu tập" open={isModalOpen} onCancel={handleCancel} footer={null}>
-        <Form
-          name="createCollectionForm"
-          labelCol={{
-            span: 6,
-          }}
-          wrapperCol={{
-            span: 18,
-          }}
-          style={{
-            width: '100%',
-            flexDirection: 'column',
-            alignItems: 'stretch',
-          }}
-          autoComplete="on"
-          form={form}>
-          <Form.Item
-            label="Tên bộ sưu tập"
-            name="typeName"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your Blog type!',
-              },
-            ]}>
-            <Select name="typeName" value={stateCollection.typeName} onChange={handleChangeSelect} options={renderOptions(typeCollections)} />
-          </Form.Item>
-          {stateCollection.typeName === 'add_type' && (
-            <Form.Item label="New type" name="newType" rules={[{ required: true, message: 'Please input your type!' }]}>
-              <InputComponent value={stateCollection.newType} onChange={handleOnchange} name="newType" />
-            </Form.Item>
-          )}
-          <Form.Item
-            label="Tập tin pdf"
-            name="fileName"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your Collection pdf!',
-              },
-            ]}>
-            <input type="file" id="file-pdf" />
-          </Form.Item>
-          <Form.Item
-            wrapperCol={{
-              offset: 20,
-              span: 16,
-            }}>
-            <Button type="primary" htmlType="submit" onClick={createCollection}>
-              Đăng
-            </Button>
-          </Form.Item>
-        </Form>
-      </ModalComponent>
-      <DrawerComponent title="Chi tiết bộ sưu tập" isOpen={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} width="90%">
-        <Form
-          name="updateCollectionForm"
-          labelCol={{
-            span: 2,
-          }}
-          wrapperCol={{
-            span: 22,
-          }}
-          style={{
-            width: '100%',
-            flexDirection: 'column',
-            alignItems: 'stretch',
-          }}
-          autoComplete="on"
-          form={form}>
-          <Form.Item
-            label="Tên bộ sưu tập"
-            name="typeName"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your Collection title!',
-              },
-            ]}>
-            <InputComponent value={stateCollectionDetails['typeName']} onChange={handleOnchangeDetails} name="typeName" />
-          </Form.Item>
 
-          <Form.Item
-            label="Tập tin pdf"
-            name="pdf"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your Collection pdf!',
-              },
-            ]}>
-            <WrapperUploadFile onChange={handleOnchangeAvatarDetails} maxCount={1}>
-              <Button>Select File</Button>
-            </WrapperUploadFile>
-          </Form.Item>
-          <Form.Item
-            wrapperCol={{
-              offset: 20,
-              span: 16,
-            }}>
-            <Button type="primary" htmlType="submit" onClick={updateCollection}>
-              Apply
-            </Button>
-          </Form.Item>
-        </Form>
-      </DrawerComponent>
-      <ModalComponent title="Xóa bộ sưu tập" open={isModalOpenDelete} onCancel={handleCancelDelete} onOk={onDelete}>
-        <div>Bạn có chắc chắn muốn xóa bộ sưu tập này không ?</div>
+  return (
+    <div>
+      <Button
+        type="primary"
+        icon={<FolderAddOutlined />}
+        onClick={showModal}>
+        Thêm mới bộ sưu tập
+      </Button>
+      <TableComponent dataSource={data} columns={columns} onSelect={setRowSelected} />
+      <ModalComponent
+        title="Thêm mới bộ sưu tập"
+        open={isModalOpen}
+        onOk={createCollection}
+        onCancel={handleCancel}>
+        <WrapperUploadFile>
+          <Form form={form}>
+            <Form.Item
+              label="Thể loại"
+              name="typeName"
+              rules={[{ required: true, message: 'Please input your type!' }]}>
+              <Select onChange={handleChangeSelect}>
+                {renderOptions(typeCollections)}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="Tập tin"
+              name="pdf"
+              rules={[{ required: true, message: 'Please input your file!' }]}>
+              <input type="file" id="file-pdf" />
+            </Form.Item>
+          </Form>
+        </WrapperUploadFile>
       </ModalComponent>
-    </>
+      <ModalComponent
+        title="Xác nhận xóa"
+        open={isModalOpenDelete}
+        onOk={onDelete}
+        onCancel={handleCancelDelete}>
+        <p>Bạn có chắc chắn muốn xóa?</p>
+      </ModalComponent>
+      <DrawerComponent
+        title="Sửa bộ sưu tập"
+        width={720}
+        onClose={handleCloseDrawer}
+        open={isOpenDrawer}
+        bodyStyle={{ paddingBottom: 80 }}>
+        <WrapperUploadFile>
+          <Form form={form}>
+            <Form.Item
+              label="Thể loại"
+              name="typeName"
+              rules={[{ required: true, message: 'Please input your type!' }]}>
+              <Select defaultValue={stateCollectionDetails.typeName} onChange={handleChangeSelect}>
+                {renderOptions(typeCollections)}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="Tập tin"
+              name="pdf"
+              rules={[{ required: true, message: 'Please input your file!' }]}>
+              <input type="file" onChange={handleOnchangeAvatarDetails} />
+              {stateCollectionDetails.pdf && (
+                <img src={stateCollectionDetails.pdf} alt="File preview" style={{ width: '100%', marginTop: '10px' }} />
+              )}
+            </Form.Item>
+          </Form>
+        </WrapperUploadFile>
+      </DrawerComponent>
+    </div>
   );
 };
+
 export default AdminCollection;
