@@ -20,7 +20,7 @@ const LoginPage = () => {
       return;
     }
     try {
-      const res = await axios.post(`https://eprint-be-v1.onrender.com/api/express/generateOtp`, { email });
+      const res = await axios.post(`https://eprint-be.onrender.com/api/express/generateOtp`, { email });
   
       if (res.data.status === 'OK') {
         alert('Mã OTP đã được gửi vào email của bạn.');
