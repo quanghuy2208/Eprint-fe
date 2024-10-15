@@ -6,6 +6,7 @@ import AdminProduct from '../../../components/AdminProduct/index';
 import AdminBlog from '../../../components/AdminBlog/index';
 import AdminOrder from '../../../components/AdminOrder';
 import AdminCollection from '../../../components/AdminCollection';
+import CategoryLv1 from '../../../components/AdminCategory/index.js';
 
 const AdminPage = () => {
   function getItem(label, key, icon, children, type) {
@@ -17,7 +18,7 @@ const AdminPage = () => {
       type,
     };
   }
-  const items = [getItem('Người dùng', 'users', <UserOutlined />), getItem('Sản phẩm', 'products', <ProductOutlined />), getItem('Bài viết', 'blogs', <SnippetsOutlined />), getItem('Đơn hàng', 'orders', <PayCircleOutlined />), getItem('Bộ sưu tập', 'collections', <FilePdfOutlined />)];
+  const items = [getItem('Người dùng', 'users', <UserOutlined />), getItem('Sản phẩm', 'products', <ProductOutlined />), getItem('Bài viết', 'blogs', <SnippetsOutlined />), getItem('Đơn hàng', 'orders', <PayCircleOutlined />), getItem('Bộ sưu tập', 'collections', <FilePdfOutlined />), getItem('Nhóm sản phẩm', 'category', <CategoryLv1 />)];
   const [keySelected, setKeySelected] = useState();
   const handleOnCLick = ({ key }) => {
     setKeySelected(key);
@@ -34,6 +35,8 @@ const AdminPage = () => {
         return <AdminOrder />;
       case 'collections':
         return <AdminCollection />;
+        case 'category':
+        return <CategoryLv1 />;
       default:
         return <></>;
     }

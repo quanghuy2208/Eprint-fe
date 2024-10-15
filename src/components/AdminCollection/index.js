@@ -88,23 +88,23 @@ const AdminCollection = () => {
     deleteCollection();
   };
 
-  const updateCollection = async () => {
-    try {
-      const res = await axios.put(`${process.env.REACT_APP_API_URL}/collection/update/${rowSelected}`, {
-        typeName: stateCollectionDetails.typeName,
-        pdf: stateCollectionDetails.pdf,
-      });
+  // const updateCollection = async () => {
+  //   try {
+  //     const res = await axios.put(`${process.env.REACT_APP_API_URL}/collection/update/${rowSelected}`, {
+  //       typeName: stateCollectionDetails.typeName,
+  //       pdf: stateCollectionDetails.pdf,
+  //     });
 
-      if (res.data.status === 'OK') {
-        handleCloseDrawer();
-        fetchData();
-      } else {
-        alert(res.data.message);
-      }
-    } catch (error) {
-      console.error('Error occurred while updating collection:', error);
-    }
-  };
+  //     if (res.data.status === 'OK') {
+  //       handleCloseDrawer();
+  //       fetchData();
+  //     } else {
+  //       alert(res.data.message);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error occurred while updating collection:', error);
+  //   }
+  // };
 
   useEffect(() => {
     fetchData();
@@ -195,19 +195,19 @@ const AdminCollection = () => {
     form.resetFields();
   };
 
-  const handleOnchange = e => {
-    setStateCollection({
-      ...stateCollection,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const handleOnchange = e => {
+  //   setStateCollection({
+  //     ...stateCollection,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
-  const handleOnchangeDetails = e => {
-    setStateCollectionDetails({
-      ...stateCollectionDetails,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const handleOnchangeDetails = e => {
+  //   setStateCollectionDetails({
+  //     ...stateCollectionDetails,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
   const handleOnchangeAvatarDetails = async ({ fileList }) => {
     const file = fileList[0];
