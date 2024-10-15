@@ -8,10 +8,8 @@ const LoginPage = () => {
   const [otp, setOtp] = useState('');
   const [password, setPassword] = useState('');
   const [otpSent, setOtpSent] = useState(false);
-  const [generatedOtp, setGeneratedOtp] = useState('');
   const [otpMessage, setOtpMessage] = useState('');
   const wrapperRef = useRef(null);
-
 
   const sendOtp = async (event) => {
     event.preventDefault();
@@ -20,11 +18,10 @@ const LoginPage = () => {
       return;
     }
     try {
-      const res = await axios.post(`https://eprint-be.onrender.com/api/express/generateOtp`, { email });
+      const res = await axios.post(`https://eprint-be.onrender.com/api/express/generateOtp`, { email: email });
   
       if (res.data.status === 'OK') {
         alert('Mã OTP đã được gửi vào email của bạn.');
-        setGeneratedOtp(res.data.otp); // Đặt mã OTP nhận được từ server
         setOtpSent(true);
         setOtpMessage('');
       } else {
@@ -35,23 +32,24 @@ const LoginPage = () => {
       alert('Có lỗi xảy ra. Vui lòng thử lại sau.');
     }
   };
-  
 
-  const validateOtpOnClient = (enteredOtp) => {
-    if (enteredOtp === generatedOtp) {
-      setOtpMessage('Mã OTP hợp lệ!');
-    } else {
-      console.log(enteredOtp)
-      setOtpMessage('Mã OTP không hợp lệ!');
-    }
-  };
-
-  const handleOtpChange = (e) => {
+  const handleOtpChange = async (e) => {
     const enteredOtp = e.target.value;
     setOtp(enteredOtp);
 
     if (enteredOtp.length === 6) {
-      validateOtpOnClient(enteredOtp);
+      try {
+        const res = await axios.post(`https://eprint-be.onrender.com/api/express/validateOtp`, { userInput: enteredOtp });
+
+        if (res.data.status === 'OK') {
+          setOtpMessage('Mã OTP hợp lệ!');
+        } else {
+          setOtpMessage('Mã OTP không hợp lệ!');
+        }
+      } catch (error) {
+        console.error('Đã xảy ra lỗi trong khi xác minh mã OTP:', error);
+        setOtpMessage('Đã xảy ra lỗi. Vui lòng thử lại.');
+      }
     } else {
       setOtpMessage('');
     }
@@ -70,6 +68,7 @@ const LoginPage = () => {
         name: userName,
         email: email,
         password: password,
+        level: "copper"
       });
 
       if (res.data.status === 'OK') {
@@ -151,19 +150,18 @@ const LoginPage = () => {
               <label htmlFor="">Email</label>
             </div>
             <button type="button" className="btn" onClick={sendOtp}>
-              {otpSent ? 'Resend OTP' : 'Send OTP'} {/* Nút gửi hoặc gửi lại OTP */}
+              {otpSent ? 'Resend OTP' : 'Send OTP'}
             </button>
             <div className="input-group">
               <input
                 type="text"
                 required
                 value={otp}
-                onChange={handleOtpChange} // Gọi hàm kiểm tra OTP khi người dùng nhập
-                maxLength={6} // Giới hạn tối đa là 6 số
+                onChange={handleOtpChange}
+                maxLength={6}
               />
               <label htmlFor=""> OTP code</label>
             </div>
-            {/* Hiển thị thông báo OTP hợp lệ hoặc không hợp lệ */}
             {otpMessage && <p className={otpMessage === 'Mã OTP hợp lệ!' ? 'otp-valid' : 'otp-invalid'}>{otpMessage}</p>}
             <div className="input-group">
               <input type="password" required value={password} onChange={e => setPassword(e.target.value)} />
