@@ -14,7 +14,7 @@ import { axiosJWT } from '../../services/UserService.js';
 
 const AdminCollection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [rowSelected, setRowSelected] = useState('');
+  const [rowSelected, setRowSelected] = useState('');
   const [isOpenDrawer, setIsOpenDrawer] = useState(false);
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
   const [typeCollections, setTypeCollections] = useState([]);
