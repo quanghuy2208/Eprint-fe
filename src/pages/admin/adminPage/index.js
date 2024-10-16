@@ -7,6 +7,9 @@ import AdminBlog from '../../../components/AdminBlog/index';
 import AdminOrder from '../../../components/AdminOrder';
 import AdminCollection from '../../../components/AdminCollection';
 import CategoryLv1 from '../../../components/AdminCategory/index.js';
+import Option from '../../../components/AdminOption/index.js';
+import Type from '../../../components/AdminType/index.js';
+import Size from '../../../components/AdminSize/index.js';
 
 const AdminPage = () => {
   function getItem(label, key, icon, children, type) {
@@ -18,7 +21,7 @@ const AdminPage = () => {
       type,
     };
   }
-  const items = [getItem('Người dùng', 'users', <UserOutlined />), getItem('Sản phẩm', 'products', <ProductOutlined />), getItem('Bài viết', 'blogs', <SnippetsOutlined />), getItem('Đơn hàng', 'orders', <PayCircleOutlined />), getItem('Bộ sưu tập', 'collections', <FilePdfOutlined />), getItem('Nhóm sản phẩm', 'category', <CategoryLv1 />)];
+  const items = [getItem('Người dùng', 'users', <UserOutlined />), getItem('Bài viết', 'blogs', <SnippetsOutlined />), getItem('Đơn hàng', 'orders', <PayCircleOutlined />), getItem('Bộ sưu tập', 'collections', <FilePdfOutlined />), getItem('Sản phẩm', 'products', <ProductOutlined />), getItem('Nhóm sản phẩm', 'category', <ProductOutlined />), getItem('Option', 'option', <ProductOutlined />), , getItem('Type', 'type', <ProductOutlined />) , getItem('Kích thước', 'size', <ProductOutlined />)];
   const [keySelected, setKeySelected] = useState();
   const handleOnCLick = ({ key }) => {
     setKeySelected(key);
@@ -37,6 +40,12 @@ const AdminPage = () => {
         return <AdminCollection />;
         case 'category':
         return <CategoryLv1 />;
+        case 'option':
+        return <Option />;
+        case 'type':
+        return <Type />;
+        case 'size':
+        return <Size />;
       default:
         return <></>;
     }

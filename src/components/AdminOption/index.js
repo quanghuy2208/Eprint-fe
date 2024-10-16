@@ -1,4 +1,4 @@
-import { Button, Form } from 'antd';
+import { Button, Form, Select } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import './style.js';
 import TableComponent from '../TableComponent';
@@ -155,16 +155,16 @@ const AdminUser = () => {
   };
   const columns = [
     {
-      title: 'Tên người dùng',
+      title: 'Tên Option sản phẩm',
       dataIndex: 'name',
       render: text => <a>{text}</a>,
     },
     {
-      title: 'Email',
+      title: 'Danh sách kiểu sản phẩm',
       dataIndex: 'email',
     },
     {
-      title: 'Mật khẩu',
+      title: 'Danh sách kích thước',
       dataIndex: 'password',
     },
     {
@@ -175,7 +175,7 @@ const AdminUser = () => {
   ];
   return (
     <>
-      <h1>Quản lý người dùng</h1>
+      <h1>Quản lý option sản phẩm</h1>
       <div style={{ marginTop: '20px' }}>
         <TableComponent
           columns={columns}
@@ -189,7 +189,7 @@ const AdminUser = () => {
           }}
         />
       </div>
-      <DrawerComponent title="Cập nhật thông tin người dùng" isOpen={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} width="90%">
+      <DrawerComponent title="Cập nhật Option sản phẩm" isOpen={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} width="90%">
         <Form
           name="updateUserForm"
           labelCol={{
@@ -207,19 +207,19 @@ const AdminUser = () => {
           autoComplete="on"
           form={form}>
           <Form.Item
-            label="Tên người dùng"
+            label="Tên Option"
             name="name"
             rules={[
               {
                 required: true,
-                message: 'Please input your User name!',
+                message: 'Please input your option name!',
               },
             ]}>
             <InputComponent value={stateUserDetails['name']} onChange={handleOnchangeDetails} name="name" />
           </Form.Item>
 
           <Form.Item
-            label="Email"
+            label="Danh sách tùy chọn"
             name="email"
             rules={[
               {
@@ -227,10 +227,10 @@ const AdminUser = () => {
                 message: 'Please input your User email!',
               },
             ]}>
-            <InputComponent value={stateUserDetails['email']} onChange={handleOnchangeDetails} name="email" />
+            <Select value={stateUserDetails['email']} onChange={handleOnchangeDetails} name="email" />
           </Form.Item>
           <Form.Item
-            label="Password"
+            label="Danh sách kích thước"
             name="password"
             rules={[
               {
@@ -238,33 +238,7 @@ const AdminUser = () => {
                 message: 'Please input your User password!',
               },
             ]}>
-            <InputComponent value={stateUserDetails.password} onChange={handleOnchangeDetails} name="password" />
-          </Form.Item>
-          <Form.Item
-            label="Avatar"
-            name="avatar"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your User Image!',
-              },
-            ]}>
-            <WrapperUploadFile onChange={handleOnchangeAvatarDetails} maxCount={1}>
-              <Button>Select File</Button>
-              {stateUserDetails?.avatar && (
-                <img
-                  src={stateUserDetails?.avatar}
-                  style={{
-                    height: '60px',
-                    width: '60px',
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                    marginLeft: '10px',
-                  }}
-                  alt="avatar"
-                />
-              )}
-            </WrapperUploadFile>
+            <Select value={stateUserDetails.password} onChange={handleOnchangeDetails} name="password" />
           </Form.Item>
           <Form.Item
             wrapperCol={{

@@ -1,15 +1,13 @@
-import { Button, Form } from 'antd';
+import { Button, Form, Select } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import './style.js';
 import TableComponent from '../TableComponent';
 import InputComponent from '../InputComponent';
 import DrawerComponent from '../DrawerComponent';
-import { WrapperUploadFile } from '../AdminUser/style';
 import ModalComponent from '../ModalComponent/index.js';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { axiosJWT } from '../../services/UserService.js';
-import { getBase64 } from '../../utils/router.js';
 import * as UserService from '../../services/UserService';
 
 const AdminUser = () => {
@@ -19,9 +17,7 @@ const AdminUser = () => {
   const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
   const inittial = () => ({
     name: '',
-    email: '',
-    password: '',
-    image: '',
+    size: '',
   });
   const [stateUser, setStateUser] = useState(inittial());
   const [stateUserDetails, setStateUserDetails] = useState(inittial());
@@ -38,10 +34,7 @@ const AdminUser = () => {
     try {
       const res = await axios.put(`${process.env.REACT_APP_API_URL}/user/update-user/${rowSelected}`, {
         name: stateUserDetails.name,
-        email: stateUserDetails.email,
-        password: stateUserDetails.password,
-        isAdmin: stateUserDetails.isAdmin,
-        avatar: stateUserDetails.avatar,
+        size: stateUserDetails.size,
       });
 
       console.log('🚀 ~ updateUser ~ res:', res);
@@ -57,7 +50,7 @@ const AdminUser = () => {
   };
   const deleteUser = async () => {
     try {
-      const res = await axiosJWT.delete(`${process.env.REACT_APP_API_URL}/user/delete-user/${rowSelected}`, {});
+      const res = await axiosJWT.delete(`${process.env.REACT_APP_API_URL}/size/delete-size/${rowSelected}`, {});
       if (res.data.status === 'OK') {
         handleCancelDelete();
         fetchData();
@@ -86,7 +79,7 @@ const AdminUser = () => {
   }, [form, stateUserDetails, isModalOpen]);
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/user/getAll`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/size/getallSize`);
       console.log(response)
       setData(response.data.data);
     } catch (error) {
@@ -98,9 +91,7 @@ const AdminUser = () => {
     if (res?.data) {
       setStateUserDetails({
         name: res?.data?.name,
-        email: res?.data?.email,
-        password: res?.data?.password,
-        avatar: res?.data?.avatar,
+        size: res?.data?.size,
       });
     }
   };
@@ -129,9 +120,7 @@ const AdminUser = () => {
   const handleCloseDrawer = () => {
     setStateUserDetails({
       name: '',
-      email: '',
-      password: '',
-      avatar: '',
+      size: '',
     });
     setIsOpenDrawer(false);
     form.resetFields();
@@ -143,29 +132,16 @@ const AdminUser = () => {
       [e.target.name]: e.target.value,
     });
   };
-  const handleOnchangeAvatarDetails = async ({ fileList }) => {
-    const file = fileList[0];
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setStateUserDetails({
-      ...stateUserDetails,
-      avatar: file.preview,
-    });
-  };
+
   const columns = [
     {
-      title: 'Tên người dùng',
+      title: 'Tên kích thước',
       dataIndex: 'name',
       render: text => <a>{text}</a>,
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-    },
-    {
-      title: 'Mật khẩu',
-      dataIndex: 'password',
+      title: 'Kích thước',
+      dataIndex: 'size',
     },
     {
       title: 'Action',
@@ -175,7 +151,7 @@ const AdminUser = () => {
   ];
   return (
     <>
-      <h1>Quản lý người dùng</h1>
+      <h1>Quản lý kích thước</h1>
       <div style={{ marginTop: '20px' }}>
         <TableComponent
           columns={columns}
@@ -189,7 +165,7 @@ const AdminUser = () => {
           }}
         />
       </div>
-      <DrawerComponent title="Cập nhật thông tin người dùng" isOpen={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} width="90%">
+      <DrawerComponent title="Cập nhật Option sản phẩm" isOpen={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} width="90%">
         <Form
           name="updateUserForm"
           labelCol={{
@@ -207,64 +183,27 @@ const AdminUser = () => {
           autoComplete="on"
           form={form}>
           <Form.Item
-            label="Tên người dùng"
+            label="Tên kích thước"
             name="name"
             rules={[
               {
                 required: true,
-                message: 'Please input your User name!',
+                message: 'Please input name size!',
               },
             ]}>
             <InputComponent value={stateUserDetails['name']} onChange={handleOnchangeDetails} name="name" />
           </Form.Item>
 
           <Form.Item
-            label="Email"
-            name="email"
+            label="kích thước"
+            name="size"
             rules={[
               {
                 required: true,
-                message: 'Please input your User email!',
+                message: 'Please input size!',
               },
             ]}>
-            <InputComponent value={stateUserDetails['email']} onChange={handleOnchangeDetails} name="email" />
-          </Form.Item>
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your User password!',
-              },
-            ]}>
-            <InputComponent value={stateUserDetails.password} onChange={handleOnchangeDetails} name="password" />
-          </Form.Item>
-          <Form.Item
-            label="Avatar"
-            name="avatar"
-            rules={[
-              {
-                required: true,
-                message: 'Please input your User Image!',
-              },
-            ]}>
-            <WrapperUploadFile onChange={handleOnchangeAvatarDetails} maxCount={1}>
-              <Button>Select File</Button>
-              {stateUserDetails?.avatar && (
-                <img
-                  src={stateUserDetails?.avatar}
-                  style={{
-                    height: '60px',
-                    width: '60px',
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                    marginLeft: '10px',
-                  }}
-                  alt="avatar"
-                />
-              )}
-            </WrapperUploadFile>
+            <InputComponent value={stateUserDetails['size']} onChange={handleOnchangeDetails} name="size" />
           </Form.Item>
           <Form.Item
             wrapperCol={{
@@ -277,8 +216,8 @@ const AdminUser = () => {
           </Form.Item>
         </Form>
       </DrawerComponent>
-      <ModalComponent title="Xóa người dùng" open={isModalOpenDelete} onCancel={handleCancelDelete} onOk={onDelete}>
-        <div>Bạn có chắc chắn muốn xóa người dùng này không ?</div>
+      <ModalComponent title="Xóa Kích thước" open={isModalOpenDelete} onCancel={handleCancelDelete} onOk={onDelete}>
+        <div>Bạn có chắc chắn muốn xóa kích thước dùng này không ?</div>
       </ModalComponent>
     </>
   );

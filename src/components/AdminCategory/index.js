@@ -154,16 +154,16 @@ const AdminUser = () => {
   };
   const columns = [
     {
-      title: 'Tên người dùng',
+      title: 'Sản phẩm',
       dataIndex: 'name',
       render: text => <a>{text}</a>,
     },
     {
-      title: 'Email',
+      title: 'Option',
       dataIndex: 'email',
     },
     {
-      title: 'Mật khẩu',
+      title: 'Kích thước',
       dataIndex: 'password',
     },
     {
@@ -179,7 +179,7 @@ const AdminUser = () => {
         <TableComponent
           columns={columns}
           data={data}
-          onRow={(record, rowIndex) => {
+          onRow={(record) => {
             return {
               onClick: event => {
                 setRowSelected(record._id);
@@ -188,7 +188,7 @@ const AdminUser = () => {
           }}
         />
       </div>
-      <DrawerComponent title="Cập nhật thông tin người dùng" isOpen={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} width="90%">
+      <DrawerComponent title="Cập nhật thông tin Danh mục sản phẩm" isOpen={isOpenDrawer} onClose={() => setIsOpenDrawer(false)} width="90%">
         <Form
           name="updateUserForm"
           labelCol={{
