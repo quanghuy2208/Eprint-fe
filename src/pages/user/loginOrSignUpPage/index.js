@@ -18,7 +18,7 @@ const LoginPage = () => {
       return;
     }
     try {
-      const res = await axios.post(`https://eprint-be.onrender.com/api/express/generateOtp`, { email: email });
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/express/generateOtp`, { email: email });
   
       if (res.data.status === 'OK') {
         alert('Mã OTP đã được gửi vào email của bạn.');
@@ -39,7 +39,7 @@ const LoginPage = () => {
 
     if (enteredOtp.length === 6) {
       try {
-        const res = await axios.post(`https://eprint-be.onrender.com/api/express/validateOtp`, { userInput: enteredOtp });
+        const res = await axios.post(`${process.env.REACT_APP_API_URL}/express/validateOtp`, { userInput: enteredOtp });
 
         if (res.data.status === 'OK') {
           setOtpMessage('Mã OTP hợp lệ!');
@@ -123,15 +123,15 @@ const LoginPage = () => {
 
   const handleSignInClick = () => {
     if (wrapperRef.current) {
-      wrapperRef.current.classList.add('animate-signIn');
-      wrapperRef.current.classList.remove('animate-signUp');
+      wrapperRef.current.classList.add('animate-signUp');
+      wrapperRef.current.classList.remove('animate-signIn');
     }
   };
 
   const handleSignUpClick = () => {
     if (wrapperRef.current) {
-      wrapperRef.current.classList.add('animate-signUp');
-      wrapperRef.current.classList.remove('animate-signIn');
+      wrapperRef.current.classList.add('animate-signIn');
+      wrapperRef.current.classList.remove('animate-signUp');
     }
   };
 

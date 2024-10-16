@@ -16,7 +16,9 @@ const NewsDetailPage = () => {
   };
   useEffect(() => {
     getDetailsBlog(id);
-  }, []);
+    const elementBlogDetail = document.querySelector('.news_detail-content');
+    if (elementBlogDetail) elementBlogDetail.innerHTML = detailBlog.content;
+  }, [detailBlog]);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -43,11 +45,11 @@ const NewsDetailPage = () => {
           <div className="col l-9 news_detail-container">
             <div className="news_detail-title">{detailBlog.title}</div>
             <div className="news_published-date">
-              <span>{detailBlog.updatedAt}</span>
+              <span>{detailBlog.updatedAt ? new Date(detailBlog.updatedAt).toISOString().split('T')[0] : ''}</span>
               <div className="news_published-date-space"></div>by {detailBlog.author}
             </div>
             <img src={detailBlog.image} alt="" className="news_detail-image" />
-            <p className="news_detail-content">{detailBlog.content}</p>
+            <div className="news_detail-content">{detailBlog.content}</div>
           </div>
           <div className="col l-3">
             <ul className="news_blog">

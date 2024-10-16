@@ -3,13 +3,14 @@ import { background } from '../../../img/index';
 import './style.scss';
 import * as BlogService from '../../../services/BlogService';
 import { useEffect, useState } from 'react';
-
+import { generateSlug } from '../../../utils/index';
 const NewsPage = () => {
   const navigate = useNavigate();
   const [dataBlog, setDataBlog] = useState([]);
-  const [isActive, setIsActive] = useState();
+  const [blogType, setBlogType] = useState([]);
+  const [isActive, setIsActive] = useState(null);
   const getAllBlog = async typeBlog => {
-    const res = await BlogService.getAllBlog('', 15, typeBlog);
+    const res = await BlogService.getAllBlog('', 14, typeBlog);
     setDataBlog(res.data);
   };
 
@@ -20,9 +21,28 @@ const NewsPage = () => {
   const handleNavigateId = id => {
     navigate(`/News-detail/${id}`);
   };
+  const getAllTypeBlog = async () => {
+    const res = await BlogService.getAllTypeBlog();
+    setBlogType(res.data);
+  };
   useEffect(() => {
     getAllBlog(isActive);
+    getAllTypeBlog();
   }, [isActive]);
+
+  useEffect(() => {
+    if (dataBlog.length) {
+      dataBlog.forEach((blog, index) => {
+        const elementBlogDetail = document.querySelector(`.news_published--content-${index}`);
+        if (elementBlogDetail) {
+          elementBlogDetail.innerHTML = blog.content;
+        }
+      });
+    }
+  }, [dataBlog]);
+  useEffect(() => {
+    getAllBlog('', 14, '');
+  }, []);
   return (
     <>
       <div className="grid banner">
@@ -45,7 +65,7 @@ const NewsPage = () => {
           <div className="col l-9">
             <div className="row">
               {dataBlog?.map((item, index) => (
-                <div className="col l-6 ">
+                <div className="col l-6" key={index}>
                   <div className="news_wrapper">
                     <img src={item.image} alt="" className="news_image" onClick={() => handleNavigateId(item._id)} />
                     <div className="news_type">{item.typeName}</div>
@@ -53,10 +73,10 @@ const NewsPage = () => {
                       {item.title}
                     </div>
                     <div className="news_published-date">
-                      <span>{item.updatedAt}</span>
+                      <span>{new Date(item.updatedAt).toISOString().split('T')[0]}</span>
                       <div className="news_published-date-space"></div>by {item.author}
                     </div>
-                    <div className="news_content"> {item.content}</div>
+                    <div className={`news_published--content-${index} news_published--content`}></div>
                     <button className="news-detail_button" onClick={() => handleNavigateId(item._id)}>
                       Xem Thêm
                     </button>
@@ -68,15 +88,19 @@ const NewsPage = () => {
           <div className="col l-3">
             <ul className="news_category">
               Danh mục bài viết
-              {dataBlog?.map((item, index) => (
-                <li className={isActive === item.typeSlug ? 'news_category-items active' : 'news_category-items'} onClick={() => handleClick(item.typeSlug)}>
-                  {item.typeName}
+              {blogType?.map((item, index) => (
+                <li className={isActive === item ? 'news_category-items active' : 'news_category-items'} onClick={() => handleClick(generateSlug(item))}>
+                  {item}
                 </li>
               ))}
             </ul>
             <ul className="news_blog">
               Bài viết mới nhất
-              <li className="news_blog-items">Thiết kế và in ấn Menu ở đâu đẹp và chất lượng?</li>
+              {dataBlog?.map((item, index) => (
+                <li className="news_blog-items" onClick={() => handleNavigateId(item._id)}>
+                  {item.title}
+                </li>
+              ))}
             </ul>
           </div>
         </div>

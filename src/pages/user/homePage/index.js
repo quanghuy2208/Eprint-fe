@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { banner, images } from '../../../img/index';
 import { CiClock2 } from 'react-icons/ci';
 import { FaRegEye } from 'react-icons/fa';
@@ -10,32 +10,23 @@ import { Link, useNavigate } from 'react-router-dom';
 import AwesomeSlider from 'react-awesome-slider';
 import 'react-awesome-slider/dist/styles.css';
 import './style.scss';
-import { useSelector } from 'react-redux';
 import * as ProductService from '../../../services/ProductService';
-import { useDebounce } from '../../../hooks/useDebounce';
+import * as BlogService from '../../../services/BlogService';
 
 const HomePage = () => {
-  const searchProduct = useSelector(state => state?.product?.search);
-  const searchDebounce = useDebounce(searchProduct, 1000);
   const [dataProduct, setDataProduct] = useState([]);
   const [isActive, setIsActive] = useState('hop-banh-tet');
-  const refSearch = useRef();
   const navigate = useNavigate();
-  const fetchProductAll = async search => {
-    const res = await ProductService.getAllProduct(search);
-    return res;
-  };
+  const [blogData, setBlogData] = useState([]);
   const getAllProduct = async typeProduct => {
     const res = await ProductService.getAllProduct('', 15, typeProduct);
     setDataProduct(res.data);
   };
 
-  useEffect(() => {
-    if (refSearch.current) {
-      fetchProductAll(searchDebounce);
-    }
-    refSearch.current = true;
-  }, [searchDebounce]);
+  const fetchBlog = async (search, limit, typeBlog) => {
+    const res = await BlogService.getAllBlog(search, limit, typeBlog);
+    setBlogData(res?.data);
+  };
 
   const handleClick = typeProduct => {
     getAllProduct(typeProduct);
@@ -44,6 +35,19 @@ const HomePage = () => {
   useEffect(() => {
     getAllProduct(isActive);
   }, [isActive]);
+  useEffect(() => {
+    fetchBlog('', 3, '');
+  }, []);
+  useEffect(() => {
+    if (blogData.length) {
+      blogData.forEach((blog, index) => {
+        const elementBlogDetail = document.querySelector(`.news-dscr-${index}`);
+        if (elementBlogDetail) {
+          elementBlogDetail.innerHTML = blog.content;
+        }
+      });
+    }
+  }, [blogData]);
   const handleNavigatetype = typeSlug => {
     navigate(`/Product-type/${typeSlug}`, { state: typeSlug });
   };
@@ -63,7 +67,7 @@ const HomePage = () => {
         </div>
       </div>
       <div className="grid wide content">
-        <div className="row ">
+        <div className="row advanced-border ">
           <div className="col l-3 advanced">
             <svg width="65" height="39" viewBox="0 0 65 39" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M2 10.0819H10.6624V2H46.244V32.8356" stroke="#D22227" stroke-width="2.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
@@ -79,6 +83,7 @@ const HomePage = () => {
               <p className="advanced_title">Giao hàng miễn phí</p>
               <p className="advanced_dscr">Khu vực Hà Nội</p>
             </div>
+            <div className="advanced-colunms"></div>
           </div>
           <div className="col l-3 advanced">
             <svg width="54" height="48" viewBox="0 0 54 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -93,6 +98,7 @@ const HomePage = () => {
               <p className="advanced_title">In số lượng</p>
               <p className="advanced_dscr">Chỉ tử 1 quyển</p>
             </div>
+            <div className="advanced-colunms"></div>
           </div>
           <div className="col l-3 advanced">
             <svg width="47" height="49" viewBox="0 0 47 49" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -113,6 +119,7 @@ const HomePage = () => {
               <p className="advanced_title">Miễn phí thiết kế</p>
               <p className="advanced_dscr">Khi in số lượng lớn</p>
             </div>
+            <div className="advanced-colunms"></div>
           </div>
           <div className="col l-3 advanced">
             <svg width="73" height="41" viewBox="0 0 73 41" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -143,7 +150,7 @@ const HomePage = () => {
                 <div
                   className="category-item"
                   onClick={() => {
-                    const typeSlug = 'lich-tet';
+                    const typeSlug = 'lich';
                     handleNavigatetype(typeSlug);
                   }}>
                   <img src={images.calendar} alt="" className="category-item_image"></img>
@@ -301,7 +308,7 @@ const HomePage = () => {
           </div>
           <div className="row">
             {dataProduct.map((item, index) => (
-              <div className="col l-2-4">
+              <div className="col l-2-4 product-grid-align">
                 <div className="product-grid" onClick={() => handleNavigateId(item._id)}>
                   <div className="product-image">
                     <img src={item.image} alt="" className="image" />
@@ -392,81 +399,38 @@ const HomePage = () => {
           </div>
           <h2 className="center"> Tin tức mới nhất </h2>
           <div className="row">
-            <div className="col l-4">
-              <div className="news">
-                <img src={images.news} alt="" className="news-img"></img>
-                <div className="news-body">
-                  <div className="news-name">Thiết kế và in ấn Menu ở đâu đẹp và chất lượng?</div>
-                  <p className="news-dscr">Menu có vai trò vô cùng quan trọng và là thứ không thể thiếu trong các nhà hàng,...</p>
-                  <div>
-                    <ul className="news-list">
-                      <li className="news-number">
-                        <FaPencilAlt className="news-icon" />
-                        Eprint
-                      </li>
-                      <li className="news-number">
-                        <FaRegEye className="news-icon" />
-                        1500
-                      </li>
-                      <li className="news-number">
-                        <CiClock2 className="news-icon" />
-                        15.10.2024
-                      </li>
-                    </ul>
+            {blogData?.map((item, index) => (
+              <div className="col l-4">
+                <div
+                  className="news"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    navigate(`/News-detail/${item._id}`);
+                  }}>
+                  <img src={item.image} alt="" className="news-img" id="blog-image" style={{ height: '253.33px' }}></img>
+                  <div className="news-body">
+                    <div className="news-name">{item.title}</div>
+                    <p className={`news-dscr-${index} news-dscr`}></p>
+                    <div>
+                      <ul className="news-list">
+                        <li className="news-number">
+                          <FaPencilAlt className="news-icon" />
+                          EPrint
+                        </li>
+                        <li className="news-number">
+                          <FaRegEye className="news-icon" />
+                          1500
+                        </li>
+                        <li className="news-number">
+                          <CiClock2 className="news-icon" />
+                          {new Date(item.updatedAt).toISOString().split('T')[0]}
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="col l-4">
-              <div className="news">
-                <img src={images.news} alt="" className="news-img"></img>
-                <div className="news-body">
-                  <div className="news-name">Thiết kế và in ấn Menu ở đâu đẹp và chất lượng?</div>
-                  <p className="news-dscr">Menu có vai trò vô cùng quan trọng và là thứ không thể thiếu trong các nhà hàng,...</p>
-                  <div>
-                    <ul className="news-list">
-                      <li className="news-number">
-                        <FaPencilAlt className="news-icon" />
-                        Eprint
-                      </li>
-                      <li className="news-number">
-                        <FaRegEye className="news-icon" />
-                        1500
-                      </li>
-                      <li className="news-number">
-                        <CiClock2 className="news-icon" />
-                        15.10.2024
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col l-4">
-              <div className="news">
-                <img src={images.news} alt="" className="news-img"></img>
-                <div className="news-body">
-                  <div className="news-name">Thiết kế và in ấn Menu ở đâu đẹp và chất lượng?</div>
-                  <p className="news-dscr">Menu có vai trò vô cùng quan trọng và là thứ không thể thiếu trong các nhà hàng,...</p>
-                  <div>
-                    <ul className="news-list">
-                      <li className="news-number">
-                        <FaPencilAlt className="news-icon" />
-                        Eprint
-                      </li>
-                      <li className="news-number">
-                        <FaRegEye className="news-icon" />
-                        1500
-                      </li>
-                      <li className="news-number">
-                        <CiClock2 className="news-icon" />
-                        15.10.2024
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
