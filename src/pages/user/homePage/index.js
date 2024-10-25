@@ -12,6 +12,7 @@ import 'react-awesome-slider/dist/styles.css';
 import './style.scss';
 import * as ProductService from '../../../services/ProductService';
 import * as BlogService from '../../../services/BlogService';
+import * as CartService from '../../../services/CardService';
 
 const HomePage = () => {
   const [dataProduct, setDataProduct] = useState([]);
@@ -20,7 +21,9 @@ const HomePage = () => {
   const [blogData, setBlogData] = useState([]);
   const getAllProduct = async typeProduct => {
     const res = await ProductService.getAllProduct('', 15, typeProduct);
+    console.log(res)
     setDataProduct(res.data);
+    
   };
 
   const fetchBlog = async (search, limit, typeBlog) => {
@@ -32,6 +35,18 @@ const HomePage = () => {
     getAllProduct(typeProduct);
     setIsActive(typeProduct);
   };
+
+  const addToCart = async (productId, products_name, products_image, products_price) => {
+    const user_id = "670f8def3bcec01a8bae2ce0"
+    const quantity = 1
+    // const productId = item.id
+    // const products_name = item.name
+    // const products_image = item.image
+    // const products_price = item.price
+      await CartService.addToCard(user_id, productId, quantity, products_name, products_image, products_price);
+      return;
+  };
+
   useEffect(() => {
     getAllProduct(isActive);
   }, [isActive]);
@@ -52,7 +67,7 @@ const HomePage = () => {
     navigate(`/Product-type/${typeSlug}`, { state: typeSlug });
   };
   const handleNavigateId = id => {
-    navigate(`/Product-detail/${id}`);
+    navigate(`/Product-detail/${id}`)
   };
   return (
     <>
@@ -313,7 +328,7 @@ const HomePage = () => {
                   <div className="product-image">
                     <img src={item.image} alt="" className="image" />
                     <ul className="product-links">
-                      <li className="product-link">
+                      <li className="product-link" onClick={() => addToCart(item._id, item.name, item.image, item.price)}>
                         <BsHandbag />
                       </li>
                       <li className="product-link">

@@ -9,6 +9,7 @@ import { CiSearch } from 'react-icons/ci';
 import { BsHandbag } from 'react-icons/bs';
 import Carousel from 'react-multi-carousel';
 import * as ProductService from '../../../services/ProductService';
+import * as CartService from '../../../services/CardService';
 import './style.scss';
 import { useParams } from 'react-router-dom';
 
@@ -21,6 +22,12 @@ const DetailPage = () => {
   const [modal, setModal] = useState(false);
   const toggleModal = () => {
     setModal(!modal);
+  };
+
+  const addToCart = async (productId) => {
+    const user_id = "670f8def3bcec01a8bae2ce0"
+      await CartService.addToCard(user_id, productId);
+      return;
   };
 
   if (modal) {
@@ -119,7 +126,8 @@ const DetailPage = () => {
                       </label>
                     </div>
                   </div>
-                  <button className="product-detail_btn">
+                  {/* onClick={addToCart(productId)} */}
+                  <button className="product-detail_btn" >
                     <span className="text">ĐẶT HÀNG NGAY</span>
                   </button>
                 </div>

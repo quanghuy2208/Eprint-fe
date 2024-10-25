@@ -11,6 +11,9 @@ import { Popover } from 'antd';
 import * as UserService from '../../../../services/UserService';
 import { searchProduct } from '../../../../redux/slices/productSlice';
 import { useDispatch } from 'react-redux';
+// -------------------------------
+// import { Popover, Button } from 'antd';
+// -------------------------------
 
 const Header = () => {
   const navigate = useNavigate();
@@ -279,10 +282,14 @@ const Header = () => {
           </div>
           <div className="col l-3 header__top-right">
             <ul>
+                  <div className="header__top-align">
               <li>
-                <BsHandbag className="header__top-icon" />
-                <span>0</span>
+                < BsHandbag className="header__top-icon" />
               </li>
+              <Link to={'/card'} className="text">
+                    Giỏ hàng
+                  </Link>
+                  </div>
               <div className="header__top-align">
                 <li>
                   <BsPerson className="header__top-icon" />

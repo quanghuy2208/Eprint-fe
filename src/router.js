@@ -18,6 +18,9 @@ import React, { useEffect, useState } from 'react';
 import NewsPage from './pages/user/newsPage/index.js';
 import NewsDetailPage from './pages/user/newsDetailPage/index.js';
 import CollectionPage from './pages/user/collectionPage/index.js';
+// ---------------------
+import CartPage from './pages/user/CardPdage/index.js'
+// ---------------------
 const RenderUserRouter = () => {
   const [user, setUser] = useState(null);
   useEffect(() => {
@@ -68,6 +71,10 @@ const RenderUserRouter = () => {
     {
       path: ROUTERS.USER.DESIGN.LOGO,
       component: <LogoPage />,
+    },
+    {
+      path: ROUTERS.USER.CARD,
+      component: <CartPage />,
     },
     {
       path: ROUTERS.USER.COLLECTION,
